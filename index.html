@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Great Oracle of Sissy Sluts</title>
+  <meta name="theme-color" content="#150017" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <p class="eyebrow">PWA session generator</p>
+    <h1>The Great Oracle of Sissy Sluts</h1>
+    <p class="subtitle">Choose offerings. Generate a decisive reality or fantasy session.</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel generator-panel">
+      <div class="panel-head">
+        <h2>Ask the Oracle</h2>
+        <button id="clearTagsBtn" class="secondary">Clear tags</button>
+      </div>
+
+      <div id="tagGroups" class="tag-groups"></div>
+
+      <div class="controls-grid">
+        <label>
+          Reality
+          <select id="realityLevel">
+            <option value="reality">Reality-based</option>
+            <option value="private_roleplay">Private roleplay</option>
+            <option value="fantasy">Fantasy roleplay</option>
+            <option value="extreme_fantasy">Extreme fantasy</option>
+            <option value="story_only">Story-only</option>
+          </select>
+        </label>
+        <label>
+          Length
+          <select id="sessionLength">
+            <option value="quick">Quick</option>
+            <option value="30">30 minutes</option>
+            <option value="45" selected>45 minutes</option>
+            <option value="60">60 minutes</option>
+            <option value="open">Open-ended</option>
+          </select>
+        </label>
+        <label>
+          Outfit level
+          <select id="sluttiness">
+            <option value="cute">Cute</option>
+            <option value="flirty">Flirty</option>
+            <option value="slutty" selected>Slutty</option>
+            <option value="extreme">Extreme</option>
+          </select>
+        </label>
+        <label>
+          Exposure style
+          <select id="exposureStyle">
+            <option value="none">None</option>
+            <option value="private_fantasy">Private fantasy</option>
+            <option value="private_photos">Private photos</option>
+            <option value="anonymous_caption">Anonymous caption</option>
+            <option value="trusted_sharing">Trusted sharing</option>
+            <option value="public_posting_fantasy">Public posting fantasy</option>
+            <option value="real_public_posting">Real public posting</option>
+          </select>
+        </label>
+      </div>
+
+      <button id="generateBtn" class="primary big">Generate Session</button>
+    </section>
+
+    <section id="resultCard" class="panel result-card hidden">
+      <div class="panel-head">
+        <h2 id="resultTitle">Generated Session</h2>
+        <button id="saveSessionBtn" class="secondary">Save</button>
+      </div>
+      <div id="resultContent"></div>
+      <div class="adjustments">
+        <button class="adjustBtn" data-adjust="regenerate">Regenerate</button>
+        <button class="adjustBtn" data-adjust="softer">Make softer</button>
+        <button class="adjustBtn" data-adjust="sluttier">Make sluttier</button>
+        <button class="adjustBtn" data-adjust="fantasy">More fantasy</button>
+        <button class="adjustBtn" data-adjust="realistic">More realistic</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Chore Vault</h2>
+      <form id="choreForm" class="chore-form">
+        <input id="choreName" placeholder="Chore name, e.g. Mop kitchen floor" />
+        <select id="choreRoom">
+          <option>Bedroom</option>
+          <option>Bathroom</option>
+          <option>Kitchen</option>
+          <option>Living room</option>
+          <option>Laundry</option>
+          <option>Whole house</option>
+        </select>
+        <input id="choreDuration" type="number" min="5" max="180" step="5" value="15" />
+        <button class="primary" type="submit">Add chore</button>
+      </form>
+      <ul id="choreList" class="list"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>Settings</h2>
+      <p class="muted">These control what the generator is allowed to include. The generated session itself stays direct.</p>
+      <div id="settingsList" class="settings-list"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Saved Sessions</h2>
+      <ul id="savedSessions" class="list"></ul>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
