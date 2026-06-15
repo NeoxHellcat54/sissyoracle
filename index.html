@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#120014" />
+  <title>The Great Oracle of Sissy Sluts</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <p class="eyebrow">PWA fantasy session roller</p>
+      <h1>The Great Oracle of Sissy Sluts</h1>
+      <p class="subtitle">Select offerings, generate a session idea, then edit, reroll, soften, or ignore anything you want.</p>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section class="card intro-card">
+      <h2>Ask the Oracle</h2>
+      <p>This starter app runs fully in the browser. It stores chores/settings locally and avoids reward, punishment, or forced-completion mechanics.</p>
+      <div class="notice">
+        Generated sessions are optional fantasy/roleplay prompts. Keep anything real-world consensual, legal, private-aware, and within your own limits.
+      </div>
+    </section>
+
+    <section class="grid two-col">
+      <div class="card">
+        <h2>Offerings</h2>
+        <p class="muted">Pick as many as you like. The generator works best with 3–8.</p>
+        <div id="tagGroups" class="tag-groups"></div>
+      </div>
+
+      <aside class="card controls-card">
+        <h2>Session controls</h2>
+
+        <label class="field">
+          <span>Reality level</span>
+          <select id="realityLevel">
+            <option value="reality">Reality-based</option>
+            <option value="private_roleplay" selected>Private roleplay</option>
+            <option value="fantasy">Fantasy roleplay</option>
+            <option value="extreme_fantasy">Extreme fantasy</option>
+            <option value="story_only">Story-only</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Session length</span>
+          <select id="sessionLength">
+            <option value="quick">Quick</option>
+            <option value="30">30 minutes</option>
+            <option value="45" selected>45 minutes</option>
+            <option value="60">60 minutes</option>
+            <option value="open">Open-ended</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Exposure style</span>
+          <select id="exposureStyle">
+            <option value="none">No exposure layer</option>
+            <option value="private_fantasy">Private fantasy</option>
+            <option value="private_photos">Private photos</option>
+            <option value="anonymous_caption">Anonymous caption fantasy</option>
+            <option value="trusted_sharing">Trusted sharing idea</option>
+            <option value="public_posting_fantasy">Public posting fantasy</option>
+            <option value="real_public_posting">Real public posting enabled</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Sluttiness</span>
+          <select id="sluttiness">
+            <option value="cute">Cute</option>
+            <option value="flirty">Flirty</option>
+            <option value="slutty" selected>Slutty</option>
+            <option value="extreme">Extreme</option>
+          </select>
+        </label>
+
+        <label class="field">
+          <span>Output style</span>
+          <select id="outputStyle">
+            <option value="session" selected>Session card</option>
+            <option value="scenario">Fantasy scenario</option>
+            <option value="checklist">Checklist</option>
+          </select>
+        </label>
+
+        <div class="button-row">
+          <button id="generateBtn" class="primary">Generate session</button>
+          <button id="clearTagsBtn" class="secondary">Clear tags</button>
+        </div>
+      </aside>
+    </section>
+
+    <section id="resultCard" class="card result-card hidden" aria-live="polite">
+      <div class="result-topline">
+        <div>
+          <p class="eyebrow">Generated session</p>
+          <h2 id="resultTitle">Session Title</h2>
+        </div>
+        <button id="saveSessionBtn" class="secondary">Save</button>
+      </div>
+      <div id="resultContent" class="result-content"></div>
+      <div class="button-row wrap">
+        <button data-adjust="regenerate" class="secondary adjustBtn">Regenerate</button>
+        <button data-adjust="softer" class="secondary adjustBtn">Make softer</button>
+        <button data-adjust="sluttier" class="secondary adjustBtn">Make sluttier</button>
+        <button data-adjust="fantasy" class="secondary adjustBtn">More fantasy</button>
+        <button data-adjust="realistic" class="secondary adjustBtn">More realistic</button>
+      </div>
+    </section>
+
+    <section class="grid two-col">
+      <div class="card">
+        <h2>Chore vault</h2>
+        <p class="muted">Add real chores the generator can optionally pull from.</p>
+        <form id="choreForm" class="inline-form">
+          <input id="choreName" type="text" placeholder="e.g. Clean bedroom surfaces" required />
+          <select id="choreRoom">
+            <option>Bedroom</option>
+            <option>Bathroom</option>
+            <option>Kitchen</option>
+            <option>Laundry</option>
+            <option>General</option>
+          </select>
+          <select id="choreDuration">
+            <option value="5">5 min</option>
+            <option value="10">10 min</option>
+            <option value="15" selected>15 min</option>
+            <option value="20">20 min</option>
+            <option value="30">30 min</option>
+          </select>
+          <button class="secondary" type="submit">Add</button>
+        </form>
+        <ul id="choreList" class="list"></ul>
+      </div>
+
+      <div class="card">
+        <h2>Settings</h2>
+        <p class="muted">Broad availability settings, not detailed clothing lists.</p>
+        <div id="settingsList" class="settings-list"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Saved sessions</h2>
+      <ul id="savedSessions" class="list"></ul>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>Built as a simple offline-first PWA starter. Edit the tags, templates, and generator logic in <code>app.js</code>.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
