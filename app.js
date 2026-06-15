@@ -1,4 +1,4 @@
-const STORAGE_KEY = "sissyOraclePwa.v1";
+const STORAGE_KEY = "sissyOraclePwa.v2";
 
 const tagGroups = [
   {
@@ -37,7 +37,7 @@ const defaultSettings = {
   allowHeels: true,
   allowStockings: true,
   allowMakeup: true,
-  allowWigs: false,
+  allowWigs: true,
   allowCollarsChokers: true,
   allowRestraints: false,
   allowToyMentions: false,
@@ -63,73 +63,284 @@ const settingLabels = {
   hideIdentityByDefault: "Hide identity by default"
 };
 
+const colorPalettes = {
+  Goth: ["black", "deep red", "dark purple", "silver"],
+  Maid: ["black", "white", "pink", "navy"],
+  Bimbo: ["hot pink", "white", "baby blue", "glittery silver"],
+  Princess: ["baby blue", "pink", "white", "gold"],
+  Schoolgirl: ["navy", "white", "red plaid", "grey"],
+  Office: ["black", "white", "grey", "burgundy"],
+  Party: ["hot pink", "silver", "black", "red"],
+  "Stripper-inspired": ["black", "silver", "clear", "neon pink"],
+  Doll: ["pink", "white", "baby blue", "lavender"],
+  Latex: ["glossy black", "red", "white", "pink"],
+  Lingerie: ["black", "red", "pink", "white"],
+  Casual: ["white", "black", "denim", "pink"],
+  Housewife: ["pastel", "white", "floral", "pink"],
+  Pornstar: ["black", "red", "gold", "clear"],
+  Cute: ["pink", "white", "pastel blue", "lavender"],
+  Trashy: ["leopard print", "neon pink", "black", "red"],
+  Elegant: ["black", "cream", "gold", "deep red"]
+};
+
 const outfitTemplates = [
   {
+    id: "latex_princess",
+    match: ["Latex", "Princess"],
+    title: "Latex Princess",
+    outfit: {
+      base: [
+        "Wear a glossy black latex catsuit with a bright blue short dress over the top.",
+        "Wear a white latex bodysuit under a pink princess mini dress.",
+        "Wear a glossy pink latex top with a baby-blue tutu skirt."
+      ],
+      lingerie: ["Add white lace panties underneath.", "Add a pink bralette under the latex.", "Add a tiny white thong."],
+      legs: ["Wear white thigh-high stockings.", "Wear sheer white tights.", "Wear glossy black thigh-highs."],
+      shoes: ["Wear white heels.", "Wear pink platform heels.", "Wear sparkly silver heels."],
+      accessories: ["Add a long flowy blonde wig with a bow.", "Add a tiara and a pink ribbon choker.", "Add satin gloves and a princess bow."],
+      makeup: ["Wear pink lipstick and blue eyeshadow.", "Wear glossy lipstick, heavy lashes, and glitter eyeshadow.", "Wear doll-like blush and shiny pink lips."]
+    }
+  },
+  {
     id: "goth_maid",
-    match: ["goth", "maid"],
-    title: "Goth maid outfit",
-    text: "A black maid-inspired outfit: black skirt or dress, light/frilly top if available, stockings or fishnets, choker, dark makeup, and heels or boots if available."
+    match: ["Goth", "Maid"],
+    title: "Goth Maid",
+    outfit: {
+      base: [
+        "Wear a short black maid dress with a white apron.",
+        "Wear a black pleated skirt with a white frilly blouse and a black apron.",
+        "Wear a black corset-style top with a short black skirt and maid apron."
+      ],
+      lingerie: ["Wear black lace panties.", "Wear a black bra and matching panties.", "Wear black lingerie under the maid outfit."],
+      legs: ["Wear black fishnets.", "Wear black thigh-high stockings.", "Wear striped black-and-white stockings."],
+      shoes: ["Wear black heels.", "Wear black platform boots.", "Wear glossy black Mary Jane heels."],
+      accessories: ["Add a black choker and white maid headband.", "Add lace wrist cuffs and a black ribbon collar.", "Add a small bell choker and dark hair bow."],
+      makeup: ["Wear black eyeliner and dark red lipstick.", "Wear smoky eyeshadow and black lipstick.", "Wear heavy eyeliner, pale powder, and glossy dark lips."]
+    }
   },
   {
     id: "bimbo_party",
-    match: ["bimbo", "party"],
-    title: "Bimbo party outfit",
-    text: "A loud, flirty party look: short skirt or tight bottoms, glossy lips, playful accessories, bright or pink details, and heels if available."
+    match: ["Bimbo", "Party"],
+    title: "Bimbo Party Girl",
+    outfit: {
+      base: [
+        "Wear a tiny hot-pink mini dress.",
+        "Wear a tight white crop top with a pink micro skirt.",
+        "Wear a sparkly silver party dress that barely covers your thighs."
+      ],
+      lingerie: ["Wear a pink thong.", "Wear white lace panties.", "Wear a matching pink bra and panties."],
+      legs: ["Wear nude glossy tights.", "Wear white thigh-high stockings.", "Wear bare legs with body glitter."],
+      shoes: ["Wear clear platform heels.", "Wear pink stilettos.", "Wear white heels."],
+      accessories: ["Add big hoop earrings and a glittery handbag.", "Add a blonde wig and pink hair clips.", "Add a rhinestone choker and bracelets."],
+      makeup: ["Wear glossy pink lips and heavy mascara.", "Wear bright pink lipstick and sparkly eyeshadow.", "Wear fake lashes, blush, and high-shine lip gloss."]
+    }
   },
   {
-    id: "casual_slutty",
-    match: ["casual", "slutty"],
-    title: "Casual slutty outfit",
-    text: "A wearable-but-flirty outfit: tight top, short skirt/shorts or fitted bottoms, cute underwear, socks or stockings, and light makeup if allowed."
+    id: "schoolgirl_slutty",
+    match: ["Schoolgirl", "Slutty"],
+    title: "Slutty Schoolgirl",
+    outfit: {
+      base: [
+        "Wear a white button-up shirt tied at the waist with a short plaid skirt.",
+        "Wear a tight white blouse with a tiny pleated skirt.",
+        "Wear a cropped school shirt with a navy mini skirt."
+      ],
+      lingerie: ["Wear white panties.", "Wear pink panties.", "Wear lace panties that match the skirt."],
+      legs: ["Wear knee-high white socks.", "Wear thigh-high socks.", "Wear sheer tights."],
+      shoes: ["Wear black Mary Jane shoes.", "Wear black heels.", "Wear white sneakers."],
+      accessories: ["Add a loose necktie and pigtails.", "Add a hair bow and fake glasses.", "Add a backpack and ribbon choker."],
+      makeup: ["Wear soft pink lipstick and bright eyeshadow.", "Wear glossy lips and long lashes.", "Wear cute blush and light eyeliner."]
+    }
   },
   {
     id: "stripper_fantasy",
-    match: ["stripper-inspired"],
-    title: "Stripper-inspired outfit",
-    text: "A private fantasy performance look: revealing layers, dramatic heels if available, shiny details, and one attention-grabbing accessory."
+    match: ["Stripper-inspired"],
+    title: "Stripper Fantasy",
+    outfit: {
+      base: [
+        "Wear a tiny bikini-style top with a micro skirt.",
+        "Wear a sheer robe over lingerie.",
+        "Wear a cropped top with thong bottoms and a short open skirt."
+      ],
+      lingerie: ["Wear a thong.", "Wear black lingerie.", "Wear red lingerie."],
+      legs: ["Wear fishnets.", "Wear bare legs with body glitter.", "Wear glossy thigh-high stockings."],
+      shoes: ["Wear clear platform heels.", "Wear black stripper heels.", "Wear shiny red heels."],
+      accessories: ["Add a rhinestone choker.", "Add glitter body spray and bracelets.", "Add a silky robe as the first layer."],
+      makeup: ["Wear heavy eyeliner, fake lashes, and glossy lips.", "Wear red lipstick and smoky eyeshadow.", "Wear glitter eyeshadow and high-shine lip gloss."]
+    }
   },
   {
-    id: "latex_doll",
-    match: ["latex", "doll"],
-    title: "Latex doll fantasy outfit",
-    text: "A glossy doll-like fantasy outfit: shiny black pieces or the closest equivalent, stockings, dramatic makeup, and a controlled, artificial presentation."
+    id: "lingerie_doll",
+    match: ["Lingerie", "Doll"],
+    title: "Lingerie Doll",
+    outfit: {
+      base: [
+        "Wear a pink babydoll nightie.",
+        "Wear a white lace teddy.",
+        "Wear a pastel lingerie set with a short sheer robe."
+      ],
+      lingerie: ["Wear matching lace panties.", "Wear a tiny thong.", "Wear frilly panties."],
+      legs: ["Wear white thigh-high stockings.", "Wear pink stockings.", "Wear sheer tights."],
+      shoes: ["Wear pink heels.", "Wear white heels.", "Wear fluffy slippers."],
+      accessories: ["Add a bow choker and hair bow.", "Add a long wig and satin gloves.", "Add a ribbon collar and doll-like hair clips."],
+      makeup: ["Wear doll-like blush, pink lipstick, and long lashes.", "Wear glossy lips and soft pastel eyeshadow.", "Wear heart-shaped blush and shiny lip gloss."]
+    }
   },
   {
     id: "maid",
-    match: ["maid"],
-    title: "Maid-inspired outfit",
-    text: "A maid-coded outfit: skirt or dress, apron-like layer if available, stockings, simple shoes or heels, and a neat accessory such as a bow or choker."
+    match: ["Maid"],
+    title: "Maid",
+    outfit: {
+      base: ["Wear a black maid dress with a white apron.", "Wear a black skirt with a white blouse and apron.", "Wear a short dress with an apron tied tightly at the waist."],
+      lingerie: ["Wear lace panties.", "Wear white panties.", "Wear black panties."],
+      legs: ["Wear thigh-high stockings.", "Wear white stockings.", "Wear black tights."],
+      shoes: ["Wear black heels.", "Wear simple flats.", "Wear black Mary Jane shoes."],
+      accessories: ["Add a maid headband.", "Add a choker and wrist cuffs.", "Add a white bow and apron."],
+      makeup: ["Wear neat eyeliner and glossy lips.", "Wear soft blush and pink lipstick.", "Wear clean, doll-like makeup."]
+    }
   },
   {
     id: "goth",
-    match: ["goth"],
-    title: "Goth outfit",
-    text: "A dark gothic look: black clothing, stockings or fishnets, choker, boots or heels, and dark eyeliner/lip color if makeup is allowed."
+    match: ["Goth"],
+    title: "Goth",
+    outfit: {
+      base: ["Wear a black dress.", "Wear a black top with a short black skirt.", "Wear a black corset-style top with fitted black bottoms."],
+      lingerie: ["Wear black lace panties.", "Wear black lingerie.", "Wear dark red panties."],
+      legs: ["Wear fishnets.", "Wear black thigh-highs.", "Wear ripped black tights."],
+      shoes: ["Wear black boots.", "Wear black heels.", "Wear platform shoes."],
+      accessories: ["Add a black choker.", "Add silver jewelry and a dark hair bow.", "Add lace gloves and a collar."],
+      makeup: ["Wear dark lipstick and heavy eyeliner.", "Wear smoky eyeshadow and black lipstick.", "Wear pale foundation with dark lips."]
+    }
   },
   {
     id: "default",
     match: [],
-    title: "Generated outfit",
-    text: "A themed outfit matching your selected tags. Use the closest items you own, and skip anything that does not fit your limits or mood."
+    title: "Generated Outfit",
+    outfit: {
+      base: ["Wear a short fitted dress.", "Wear a tight top with a short skirt.", "Wear a crop top with fitted bottoms."],
+      lingerie: ["Wear matching underwear.", "Wear lace panties.", "Wear your prettiest underwear."],
+      legs: ["Wear thigh-high stockings.", "Wear tights.", "Wear knee-high socks."],
+      shoes: ["Wear heels.", "Wear cute flats.", "Wear platform shoes."],
+      accessories: ["Add a choker.", "Add a hair bow.", "Add jewelry and a cute accessory."],
+      makeup: ["Wear lipstick and eyeshadow.", "Wear glossy lips and eyeliner.", "Wear blush, mascara, and lip gloss."]
+    }
   }
 ];
 
-const activityIdeas = {
+const activityTemplates = {
   chores: [
-    "Pair the outfit with one chore from your vault, framed as a roleplay scene rather than an obligation.",
-    "Choose a small cleaning task and make the session about being watched, judged, or transformed while doing something ordinary."
+    "Complete {chore}. While doing it, stay in character as the selected outfit theme.",
+    "Complete {chore}. Take a short break halfway through to pose once in the outfit, then finish the chore.",
+    "Complete {chore}. Move slowly and deliberately, treating the chore as part of the roleplay."
   ],
   safe: [
-    "Add a soft task such as mirror posing, a short written fantasy caption, outfit inspection, or a confidence/shame reflection.",
-    "Use a low-pressure activity: one minute of posing, a short note about the outfit, or a private character introduction."
-  ],
-  sexual: [
-    "Add a sexual focus only if it fits your mood: teasing, solo play, orgasm-control fantasy, toy play, or training-themed imagination.",
-    "Keep the sexual layer adjustable: fantasy-only, private roleplay, or skipped entirely."
+    "Stand in front of a mirror for 2 minutes and pose in three different ways: cute, ashamed, and confident.",
+    "Write a 4-line caption for the outfit and read it back once.",
+    "Walk across the room five times in the outfit, then hold a final pose for 30 seconds."
   ],
   roleplay: [
-    "Frame the session as a short scenario with a beginning, a private activity, and an ending image or caption.",
-    "Treat the selected themes as a character prompt and generate the scene around that persona."
+    "Play the scene as a character introduction: enter the room, present the outfit, say one line in character, then begin the main activity.",
+    "Build the scene around being transformed into the selected persona. Start normal, dress into the outfit, then act out the final version for 5 minutes.",
+    "Create a short scenario where the character is being noticed, judged, or admired because of the outfit."
+  ],
+  transformation: [
+    "Transform in stages: underwear, main outfit, legs/shoes, accessories, makeup, final pose.",
+    "Lay out every outfit piece first, then dress one piece at a time and pause after each stage.",
+    "Create a before-and-after moment: one normal photo pose in your head, then the finished transformed pose."
+  ],
+  default: [
+    "Spend the session dressed in the generated outfit and complete one focused activity that matches the selected mood.",
+    "Use the outfit as the center of the session: dress, pose, do one activity, then finish with a final mirror check.",
+    "Create a 20-minute scene around the selected tags, with the outfit as the main anchor."
+  ]
+};
+
+const sexualTemplates = {
+  Teasing: [
+    "Add a teasing phase: touch over the outfit for 5 minutes, then stop and continue the session dressed.",
+    "Add a teasing phase: set a 10-minute timer and keep the focus on build-up, not finishing.",
+    "Add a teasing phase while looking at the finished outfit in the mirror."
+  ],
+  Masturbation: [
+    "Add a masturbation phase at the end of the session, still dressed in the outfit.",
+    "Add a solo play phase after the main activity, using the outfit and selected fantasy as the mental focus.",
+    "Add a masturbation phase with one pause halfway through to adjust the outfit and pose."
+  ],
+  "Orgasm control": [
+    "Use orgasm control: decide at the end whether the session stops at teasing or finishes.",
+    "Use orgasm control: edge once, pause for 2 minutes, then decide whether to continue.",
+    "Use orgasm control as the final theme: build up, stop, pose, then choose whether to finish."
+  ],
+  "Anal training": [
+    "Add an anal-training theme as the session focus: make the outfit, posture, and fantasy revolve around training and preparation.",
+    "Add an anal-training phase after the outfit is complete, with slow pacing and a training fantasy tone.",
+    "Frame the session as anal-training roleplay: dress first, complete the main activity, then move into the training fantasy."
+  ],
+  "Toy play": [
+    "Add one enabled toy to the session and make it part of the outfit or final scene.",
+    "Use one toy during the final phase, after the outfit and main activity are complete.",
+    "Pick one toy and build the fantasy around wearing or using it while staying in character."
+  ],
+  Bondage: [
+    "Add a restraint element: wrists, ankles, collar, blindfold, or another enabled restriction item.",
+    "Add a restriction rule for the session: limited movement, limited hand use, or a fixed pose at the end.",
+    "Use one restraint item during the final pose or fantasy scene."
+  ],
+  "Hookup fantasy": [
+    "Add a fictional hookup scene: imagine being dressed this way for a stranger who immediately understands the role you are playing.",
+    "Add a dating-app fantasy: write the profile line this outfit would deserve, then imagine the first message it attracts.",
+    "Add a private stranger fantasy around being seen in the outfit and treated according to the selected vibe."
+  ],
+  "Stranger fantasy": [
+    "Add a stranger fantasy: imagine a private audience noticing every detail of the outfit.",
+    "Add a fictional encounter where the outfit makes the character impossible to hide.",
+    "Add an imagined audience that reacts to the outfit, the posture, and the selected kink focus."
+  ],
+  "Slut training fantasy": [
+    "Add a slut-training phase: repeat three poses, one line of dialogue, and one fantasy action in character.",
+    "Add a training sequence: dress, pose, perform the main activity, then finish with a slutty character line.",
+    "Frame the session as training in presentation, obedience, and sexual confidence."
+  ],
+  "Service slut fantasy": [
+    "Add a service fantasy: the outfit exists to make the chores, posing, or sexual focus feel more submissive.",
+    "Add a service scene where the character is dressed to be useful, decorative, and obviously sexualized.",
+    "Make the main activity feel like service roleplay rather than normal chores."
+  ]
+};
+
+const exposureTemplates = {
+  none: [
+    "No exposure layer selected.",
+    "Keep exposure out of this roll."
+  ],
+  private_fantasy: [
+    "Imagine being photographed in the outfit while doing the main activity, but keep it as a mental scene.",
+    "Create a fantasy in which the outfit is discovered, commented on, and remembered."
+  ],
+  private_photos: [
+    "Take 3 private photos: one full outfit pose, one chore/action shot, and one close-up of the most humiliating outfit detail.",
+    "Take 5 private photos during the session: front, side, kneeling/low angle, chore-in-progress, final pose.",
+    "Take a private photo set showing the session from outfit reveal to finished activity."
+  ],
+  anonymous_caption: [
+    "Write an anonymous caption for the session and pair it with an imagined photo set.",
+    "Create a fake anonymous post title for the outfit and activity.",
+    "Write three possible captions: cute, degrading, and slutty."
+  ],
+  trusted_sharing: [
+    "Choose one photo from the session and frame it as something to send to a trusted adult partner.",
+    "Make a small private set of 3 photos as if it were being shared with one trusted viewer.",
+    "Write the message that would go with the best photo from the session."
+  ],
+  public_posting_fantasy: [
+    "Imagine posting the chore photos online with a humiliating caption, then write the caption and first three imagined comments.",
+    "Build the fantasy around the outfit photos being uploaded and seen by an anonymous audience.",
+    "Create a fake public post title, caption, and reaction summary for the session."
+  ],
+  real_public_posting: [
+    "Take a non-identifying photo set during the chore and post one selected image online with a short caption.",
+    "Post one non-identifying outfit/chore photo online with a direct caption matching the selected vibe.",
+    "Create a short public post from the session using one image and one caption."
   ]
 };
 
@@ -149,7 +360,8 @@ function loadState() {
   };
 
   try {
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    const oldSaved = JSON.parse(localStorage.getItem("sissyOraclePwa.v1"));
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || oldSaved;
     return saved ? { ...fallback, ...saved, settings: { ...defaultSettings, ...saved.settings } } : fallback;
   } catch {
     return fallback;
@@ -161,7 +373,7 @@ function saveState() {
 }
 
 function slugify(value) {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
 }
 
 function sample(items) {
@@ -170,6 +382,11 @@ function sample(items) {
 
 function hasTag(tags, value) {
   return tags.map(slugify).includes(slugify(value));
+}
+
+function selectedThemeTags(tags) {
+  const themeSet = new Set(tagGroups[0].tags.map(slugify));
+  return tags.filter(tag => themeSet.has(slugify(tag)));
 }
 
 function renderTags() {
@@ -269,101 +486,123 @@ function renderSavedSessions() {
   });
 }
 
-function selectOutfit(tags, sluttiness) {
+function scoreTemplate(template, tags) {
   const normalized = tags.map(slugify);
-  const scored = outfitTemplates.map(template => {
-    const score = template.match.filter(tag => normalized.includes(slugify(tag))).length;
-    return { ...template, score };
-  }).sort((a, b) => b.score - a.score);
+  return template.match.reduce((score, tag) => score + (normalized.includes(slugify(tag)) ? 1 : 0), 0);
+}
 
-  const chosen = scored.find(item => item.score > 0) || outfitTemplates.find(item => item.id === "default");
-  const modifiers = [];
+function selectOutfitTemplate(tags) {
+  const scored = outfitTemplates
+    .map(template => ({ ...template, score: scoreTemplate(template, tags) }))
+    .sort((a, b) => b.score - a.score);
 
-  if (sluttiness === "cute") modifiers.push("Keep the outfit cute and less revealing.");
-  if (sluttiness === "flirty") modifiers.push("Make it flirty without pushing it too extreme.");
-  if (sluttiness === "slutty") modifiers.push("Push it toward revealing, attention-seeking, and overtly slutty.");
-  if (sluttiness === "extreme") modifiers.push("Treat it as private/fantasy-only and make it as exaggerated as your settings allow.");
+  return scored.find(item => item.score > 0) || outfitTemplates.find(item => item.id === "default");
+}
 
-  const settingNotes = [];
-  if (!state.settings.allowHeels) settingNotes.push("avoid heels");
-  if (!state.settings.allowMakeup) settingNotes.push("skip makeup");
-  if (!state.settings.allowLingerie) settingNotes.push("avoid lingerie");
-  if (!state.settings.allowStockings) settingNotes.push("skip stockings/fishnets");
-  if (!state.settings.allowCollarsChokers) settingNotes.push("avoid collars/chokers");
-  if (!state.settings.allowSkirtsDresses) settingNotes.push("avoid skirts/dresses");
+function optionalPart(enabled, options) {
+  return enabled ? sample(options) : null;
+}
+
+function buildOutfit(tags, sluttiness) {
+  const template = selectOutfitTemplate(tags);
+  const parts = [sample(template.outfit.base)];
+
+  if (["slutty", "extreme"].includes(sluttiness)) parts.push(optionalPart(state.settings.allowLingerie, template.outfit.lingerie));
+  parts.push(optionalPart(state.settings.allowStockings, template.outfit.legs));
+  parts.push(optionalPart(state.settings.allowHeels, template.outfit.shoes));
+  parts.push(optionalPart(state.settings.allowCollarsChokers || state.settings.allowWigs, template.outfit.accessories));
+  parts.push(optionalPart(state.settings.allowMakeup, template.outfit.makeup));
+
+  if (sluttiness === "cute") parts.push("Keep the fit cute and polished, with no extra revealing layer.");
+  if (sluttiness === "flirty") parts.push("Make the skirt, top, or neckline noticeably flirty.");
+  if (sluttiness === "slutty") parts.push("Make at least one part clearly revealing: short hem, low neckline, sheer legwear, or visible lingerie detail.");
+  if (sluttiness === "extreme") parts.push("Make the look exaggerated: shorter, shinier, tighter, and more obviously sexualized.");
 
   return {
-    title: chosen.title,
-    text: [chosen.text, ...modifiers, settingNotes.length ? `Settings note: ${settingNotes.join(", ")}.` : ""].filter(Boolean).join(" ")
+    title: template.title,
+    text: parts.filter(Boolean).join(" ")
   };
 }
 
 function selectChore(tags) {
-  if (!hasTag(tags, "Chores") && !hasTag(tags, "Maid")) return null;
-  if (!state.chores.length) return "No chore is saved yet, so use a simple optional tidy-up or skip this section.";
+  if (!hasTag(tags, "Chores") && !hasTag(tags, "Maid") && !hasTag(tags, "Housewife") && !hasTag(tags, "Service slut fantasy")) return null;
+  if (!state.chores.length) return "Clean one visible surface for 10 minutes.";
   const chore = sample(state.chores);
-  return `${chore.name} (${chore.room}, about ${chore.duration} minutes).`;
+  return `${chore.name} in the ${chore.room.toLowerCase()} for ${chore.duration} minutes`;
 }
 
-function buildExposureLayer(tags, exposureStyle, realityLevel) {
+function buildMainActivity(tags, chore) {
+  if (chore) return sample(activityTemplates.chores).replace("{chore}", chore);
+  if (hasTag(tags, "Safe tasks")) return sample(activityTemplates.safe);
+  if (hasTag(tags, "Transformation") || hasTag(tags, "Bimbo corruption") || hasTag(tags, "Forced feminization fantasy")) return sample(activityTemplates.transformation);
+  if (hasTag(tags, "Roleplay scenario") || hasTag(tags, "Hookup fantasy") || hasTag(tags, "Stranger fantasy")) return sample(activityTemplates.roleplay);
+  return sample(activityTemplates.default);
+}
+
+function buildSexualFocus(tags) {
+  const tagOrder = ["Teasing", "Masturbation", "Orgasm control", "Anal training", "Toy play", "Bondage", "Hookup fantasy", "Stranger fantasy", "Slut training fantasy", "Service slut fantasy"];
+  const selected = tagOrder.filter(tag => hasTag(tags, tag));
+  const lines = [];
+
+  selected.forEach(tag => {
+    if (tag === "Toy play" && !state.settings.allowToyMentions) return;
+    if (tag === "Bondage" && !state.settings.allowRestraints) return;
+    lines.push(sample(sexualTemplates[tag]));
+  });
+
+  if (!lines.length) return "No sexual focus rolled for this session.";
+  return lines.join(" ");
+}
+
+function buildExposureLayer(tags, exposureStyle) {
   const exposureSelected = hasTag(tags, "Sissy exposure") || hasTag(tags, "Exhibition fantasy") || hasTag(tags, "Public shame fantasy") || exposureStyle !== "none";
   if (!exposureSelected) return null;
 
-  const identityNote = state.settings.hideIdentityByDefault
-    ? "Keep identity protected by default: no face, location clues, usernames, documents, mirrors, metadata, or recognizable backgrounds."
-    : "Identity protection is not forced by settings, but still consider what you may regret later.";
+  let style = exposureStyle;
+  if (style === "none") style = hasTag(tags, "Sissy exposure") || hasTag(tags, "Exhibition fantasy") || hasTag(tags, "Public shame fantasy") ? "private_photos" : "private_fantasy";
+  if (style === "private_photos" && !state.settings.allowPrivatePhotoPrompts) style = "private_fantasy";
+  if (style === "trusted_sharing" && !state.settings.allowTrustedSharingPrompts) style = "anonymous_caption";
+  if (style === "real_public_posting" && !state.settings.allowRealPublicPostingPrompts) style = "public_posting_fantasy";
 
-  if (exposureStyle === "real_public_posting" && !state.settings.allowRealPublicPostingPrompts) {
-    return "Real public posting is disabled in settings, so this becomes a public-posting fantasy instead: imagine the photos/captions existing online without actually uploading them.";
-  }
+  return sample(exposureTemplates[style]);
+}
 
-  if (exposureStyle === "trusted_sharing" && !state.settings.allowTrustedSharingPrompts) {
-    return "Trusted sharing is disabled in settings, so this becomes a private sharing fantasy or caption-writing prompt.";
-  }
+function buildSessionTitle(tags) {
+  const priority = ["Latex", "Princess", "Goth", "Maid", "Bimbo", "Party", "Sissy exposure", "Chores", "Anal training", "Hookup fantasy", "Doll", "Lingerie", "Stripper-inspired"];
+  const picked = priority.filter(tag => tags.includes(tag)).slice(0, 4);
+  return picked.length ? picked.join(" ") + " Session" : "Oracle Session";
+}
 
-  const map = {
-    none: "Add an exposure flavor as fantasy only: imagine being seen, judged, or displayed without involving real people.",
-    private_fantasy: "Exposure stays imaginary: write or imagine the caption/audience without taking or sharing real photos.",
-    private_photos: state.settings.allowPrivatePhotoPrompts
-      ? `Take private, non-identifying photos if desired, then keep them offline or delete them. ${identityNote}`
-      : "Private photo prompts are disabled, so use caption fantasy or imagination only.",
-    anonymous_caption: `Create an anonymous fantasy caption or album title without posting anything. ${identityNote}`,
-    trusted_sharing: `Optional trusted-sharing idea: only share non-identifying content with a consenting adult partner. ${identityNote}`,
-    public_posting_fantasy: "Public posting stays fantasy-only: imagine the upload, comments, or exposure without actually posting.",
-    real_public_posting: `Optional real posting idea: only legal, platform-allowed, non-identifying adult content, and only if you genuinely want that risk. ${identityNote}`
+function buildSceneSetup(tags, realityLevel, exposureStyle) {
+  const themes = selectedThemeTags(tags);
+  const moodTags = tags.filter(tag => tagGroups[1].tags.includes(tag));
+  const themeText = themes.length ? themes.slice(0, 3).join(" + ") : "custom";
+  const moodText = moodTags.length ? moodTags.slice(0, 3).join(", ").toLowerCase() : "playful";
+
+  const realityLines = {
+    reality: `Run it as a ${moodText} ${themeText} session with concrete outfit and activity steps.`,
+    private_roleplay: `Play it as a private ${moodText} ${themeText} roleplay scene from outfit reveal to final pose.`,
+    fantasy: `Imagine it as a fantasy ${themeText} session with a ${moodText} tone and exaggerated details.`,
+    extreme_fantasy: `Make it an extreme fantasy ${themeText} session with a ${moodText} tone and porn-like exaggeration.`,
+    story_only: `Write or imagine it as a story-only ${themeText} scene with a ${moodText} tone.`
   };
 
-  if (["fantasy", "extreme_fantasy", "story_only"].includes(realityLevel) && exposureStyle === "none") {
-    return "Fantasy exposure layer: imagine being displayed or discovered as part of the scenario; no real-world follow-through is implied.";
-  }
+  const extra = exposureStyle !== "none" || hasTag(tags, "Sissy exposure") || hasTag(tags, "Exhibition fantasy")
+    ? " Build the session around being seen, photographed, displayed, or exposed."
+    : "";
 
-  return map[exposureStyle] || map.private_fantasy;
+  return realityLines[realityLevel] + extra;
 }
 
-function buildSexualFocus(tags, realityLevel) {
-  const focuses = [];
-  if (hasTag(tags, "Teasing")) focuses.push("teasing");
-  if (hasTag(tags, "Masturbation")) focuses.push("solo masturbation");
-  if (hasTag(tags, "Toy play") && state.settings.allowToyMentions) focuses.push("toy play");
-  if (hasTag(tags, "Bondage") && state.settings.allowRestraints) focuses.push("bondage/restriction");
-  if (hasTag(tags, "Orgasm control")) focuses.push("orgasm-control fantasy");
-  if (hasTag(tags, "Anal training")) focuses.push("anal-training theme");
-  if (hasTag(tags, "Hookup fantasy") || hasTag(tags, "Stranger fantasy")) focuses.push("fictional hookup/stranger fantasy");
-  if (hasTag(tags, "Slut training fantasy") || hasTag(tags, "Service slut fantasy")) focuses.push("slut-training/service fantasy");
-
-  if (!focuses.length) return "No explicit sexual focus selected; keep this mostly outfit, mood, and scenario-based.";
-
-  const modeNote = ["reality", "private_roleplay"].includes(realityLevel)
-    ? "Keep it private and self-regulated; any real activity is optional and can be skipped."
-    : "Treat this as fantasy, story, or roleplay unless you deliberately choose otherwise.";
-
-  return `${focuses.join(", ")}. ${modeNote}`;
-}
-
-function buildTitle(tags) {
-  const priority = ["Goth", "Maid", "Bimbo", "Party", "Sissy exposure", "Chores", "Anal training", "Hookup fantasy", "Doll", "Latex", "Lingerie"];
-  const picked = priority.filter(tag => state.selectedTags.includes(tag)).slice(0, 4);
-  return picked.length ? `${picked.join(" ")} Session` : "Oracle Session";
+function buildTiming(sessionLength) {
+  const maps = {
+    quick: ["5 min outfit prep", "10 min main activity", "3 min final pose/photo/caption"],
+    30: ["10 min outfit prep", "15 min main activity", "5 min final pose/photo/caption"],
+    45: ["15 min outfit prep", "20 min main activity", "10 min sexual/fantasy/exposure layer"],
+    60: ["20 min outfit prep", "25 min main activity", "15 min sexual/fantasy/exposure layer"],
+    open: ["Dress until the outfit is complete", "Run the main activity once", "End with one final pose, caption, or fantasy beat"]
+  };
+  return maps[sessionLength].join(" → ");
 }
 
 function generateSession(overrides = {}) {
@@ -382,45 +621,31 @@ function generateSession(overrides = {}) {
     story_only: "Story-only"
   };
 
-  const outfit = selectOutfit(tags, sluttiness);
+  const outfit = buildOutfit(tags, sluttiness);
   const chore = selectChore(tags);
-  const exposure = buildExposureLayer(tags, exposureStyle, realityLevel);
-  const sexualFocus = buildSexualFocus(tags, realityLevel);
-
-  const activity = hasTag(tags, "Safe tasks")
-    ? sample(activityIdeas.safe)
-    : hasTag(tags, "Roleplay scenario") || ["fantasy", "extreme_fantasy", "story_only"].includes(realityLevel)
-      ? sample(activityIdeas.roleplay)
-      : hasTag(tags, "Chores") || hasTag(tags, "Maid")
-        ? sample(activityIdeas.chores)
-        : "Use the selected tags as a mood board and keep the session as light, private, or fantasy-only as you want.";
-
-  const lengthText = {
-    quick: "Quick / short scene",
-    30: "About 30 minutes",
-    45: "About 45 minutes",
-    60: "About 60 minutes",
-    open: "Open-ended"
-  }[sessionLength];
+  const mainActivity = buildMainActivity(tags, chore);
+  const sexualFocus = buildSexualFocus(tags);
+  const exposure = buildExposureLayer(tags, exposureStyle);
+  const scene = buildSceneSetup(tags, realityLevel, exposureStyle);
+  const timing = buildTiming(sessionLength);
 
   const sections = [
-    { label: "Reality", text: `${realityLabels[realityLevel]} · ${lengthText} · ${outputStyle.replace("_", " ")}` },
-    { label: "Selected vibe", text: tags.length ? tags.join(", ") : "No offerings selected yet. The Oracle generated a broad starter session." },
-    { label: "Outfit idea", text: `${outfit.title}: ${outfit.text}` },
-    { label: "Main activity", text: chore ? `${activity} Suggested chore: ${chore}` : activity },
+    { label: "Scene setup", text: scene },
+    { label: "Outfit", text: `${outfit.title}: ${outfit.text}` },
+    { label: "Timing", text: timing },
+    { label: "Main activity", text: mainActivity },
     { label: "Sexual / fantasy focus", text: sexualFocus }
   ];
 
   if (exposure) sections.push({ label: "Exposure layer", text: exposure });
 
-  sections.push({
-    label: "Self-regulation note",
-    text: "This is a generated idea, not a command. Change, skip, soften, or ignore anything that feels wrong, too risky, or not fun."
-  });
+  if (outputStyle === "checklist") {
+    sections.push({ label: "Checklist", text: "1. Dress fully. 2. Complete the main activity. 3. Add the sexual/fantasy focus. 4. Finish with the exposure/photo/caption layer if one was rolled." });
+  }
 
   const session = {
     id: crypto.randomUUID(),
-    title: buildTitle(tags),
+    title: buildSessionTitle(tags),
     sections,
     realityLabel: realityLabels[realityLevel],
     createdAt: new Date().toLocaleString(),
