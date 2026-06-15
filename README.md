@@ -1,26 +1,32 @@
-# The Great Oracle of Sissy Sluts — PWA Starter
+# The Great Oracle of Sissy Sluts — Guided PWA Starter
 
-A basic offline-first PWA fantasy/session generator.
+A small offline-first PWA fantasy/session roller.
 
-## Current version
+## Current flow
 
-This version uses a simplified session card: Outfit, Main Activity, optional Kink/Fantasy, and optional Exposure/Photo. It avoids setup/timing/final-beat filler and tries to generate direct, specific rolls rather than recaps.
+1. Home page
+   - Speak with the Oracle
+   - Settings menu
+   - Saved sessions
 
-## What it includes
+2. Outfit step
+   - The Oracle asks: “So then, how is this Sissy Slut imagining her outfit?”
+   - User selects up to 2 outfit prompts.
 
-- Multi-select Offerings tag system
-- Reality level selector
-- Exposure style selector
-- Sluttiness selector
-- Outfit generation without a clothing list
-- Chore vault stored in localStorage
-- Broad wardrobe/sharing settings
-- Direct session result card
-- Regenerate / soften / sluttier / fantasy / realistic adjustment buttons
-- Saved sessions stored locally
-- Basic PWA manifest and service worker
+3. Treatment step
+   - The Oracle asks: “How do you wish to be treated?”
+   - User selects up to 2 treatment prompts.
 
-## How to run locally
+4. Activity step
+   - The Oracle asks: “What would you like to do today?”
+   - User selects as many activity prompts as desired.
+
+5. Result
+   - Concrete outfit
+   - Treatment tone
+   - Specific task list generated from the selected activities
+
+## Preview locally
 
 ```bash
 python3 -m http.server 8080
@@ -28,6 +34,10 @@ python3 -m http.server 8080
 
 Then open `http://localhost:8080`.
 
-## GitHub Pages
+## Files
 
-Upload the folder contents to a GitHub repository, enable GitHub Pages for the repo, and serve from the root or docs folder.
+- `index.html` — guided page flow
+- `styles.css` — layout and theme
+- `app.js` — prompts, templates, settings, chore list, generator logic
+- `manifest.json` — PWA metadata
+- `sw.js` — offline cache
