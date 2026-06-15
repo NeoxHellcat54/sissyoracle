@@ -456,25 +456,149 @@ function selectChore(tags) {
   return sample(state.chores);
 }
 
-function buildMainActivity(tags, chore) {
-  if (chore) return sample(activityByTag.Chores).replace("{chore}", `${chore.name} in the ${chore.room.toLowerCase()} for ${chore.duration} minutes`);
-  const order = ["Dress-up", "Safe tasks", "Transformation", "Roleplay scenario"];
-  const selected = order.find(tag => hasTag(tags, tag));
-  if (selected) return sample(activityByTag[selected]);
-  return "Spend 15 minutes presenting the outfit: mirror check, 3 poses, one walk across the room, and one final full-body pose.";
+function selectedActivityTags(tags) {
+  return ["Chores", "Safe tasks", "Teasing", "Masturbation", "Orgasm control", "Anal training", "Toy play", "Bondage", "Transformation", "Roleplay scenario", "Hookup fantasy", "Stranger fantasy", "Slut training fantasy", "Service slut fantasy"]
+    .filter(tag => hasTag(tags, tag));
 }
 
-function buildSexualFocus(tags) {
-  const order = ["Teasing", "Masturbation", "Orgasm control", "Anal training", "Toy play", "Bondage", "Hookup fantasy", "Stranger fantasy", "Slut training fantasy", "Service slut fantasy", "Sissy exposure", "Exhibition fantasy", "Public shame fantasy", "Party slut fantasy", "Bimbo corruption", "Forced feminization fantasy"];
-  const lines = [];
-  order.forEach(tag => {
-    if (!hasTag(tags, tag)) return;
-    if (tag === "Toy play" && !state.settings.allowToyMentions) return;
-    if (tag === "Bondage" && !state.settings.allowRestraints) return;
-    if (sexualByTag[tag]) lines.push(sample(sexualByTag[tag]));
-  });
-  if (!lines.length) return "No separate sexual layer. Keep the session focused on outfit, activity, and presentation.";
-  return lines.slice(0, 3).join("\n");
+function buildMainActivity(tags, chore) {
+  if (chore) {
+    return sample([
+      `Complete ${chore.name} in the ${chore.room.toLowerCase()} for ${chore.duration} minutes while staying in the full outfit.`,
+      `Clean the ${chore.room.toLowerCase()} for ${chore.duration} minutes, focusing on ${chore.name.toLowerCase()}. Pause halfway for one photo or pose.`,
+      `Do ${chore.name.toLowerCase()} for ${chore.duration} minutes. Keep the outfit, shoes, makeup, and accessories on until the chore is finished.`
+    ]);
+  }
+
+  const selected = selectedActivityTags(tags).filter(tag => tag !== "Chores");
+  const primary = selected[0];
+  const direct = {
+    "Safe tasks": [
+      "Do 6 poses in the finished outfit: cute, nervous, slutty, ashamed, doll-like, and confident.",
+      "Walk across the room 10 times in the full outfit, then hold a standing pose for 60 seconds.",
+      "Write a 6-line caption for the outfit, then read it once while looking at the full outfit."
+    ],
+    "Teasing": [
+      "Spend 10 minutes teasing in the full outfit. Stop twice to fix the pose, makeup, and outfit details.",
+      "Play one song and tease through the whole song while keeping the outfit fully assembled.",
+      "Do a slow 7-minute tease session in the outfit, ending with one deliberate full-body pose."
+    ],
+    "Masturbation": [
+      "Masturbate for 10 minutes while wearing the full outfit, then stop for one final pose.",
+      "Use the outfit as the focus for a solo play phase: shoes and legwear stay on until the end.",
+      "Do a 12-minute solo session in the outfit and keep the selected fantasy theme in mind the whole time."
+    ],
+    "Orgasm control": [
+      "Do three rounds of 3 minutes build-up and 1 minute stillness, then decide whether the scene ends or continues.",
+      "Edge once, hold still for 2 minutes in the outfit, then either stop or continue the session.",
+      "Use a start-stop rhythm for 10 minutes: build, pause, pose, repeat."
+    ],
+    "Anal training": [
+      "Make the session anal-training themed: dress fully, get into position, and spend 15 minutes focused on training, patience, and presentation.",
+      "Use the outfit as the training uniform and spend the final phase on anal-training fantasy or toy play, depending on the user's settings.",
+      "Do a 15-minute training scene built around the outfit, strict posture, and the feeling of being prepared and inspected."
+    ],
+    "Toy play": [
+      "Use one enabled toy for 10 minutes while keeping the full outfit on.",
+      "Build the activity around one toy, one pose, and one outfit detail that stays visible the whole time.",
+      "Use a toy during the final phase, then finish with the toy put away and the outfit still complete."
+    ],
+    "Bondage": [
+      "Add one restriction for 10 minutes: wrists together, ankles limited, blindfold, collar, or another enabled restraint.",
+      "Hold one restricted pose for 5 minutes, then change into a second pose for another 5 minutes.",
+      "Make movement limited for the activity: no casual walking, no slouching, and no removing outfit pieces."
+    ],
+    "Transformation": [
+      "Do a transformation sequence: normal start, underwear layer, main outfit, hair/makeup, shoes, final persona.",
+      "Lay out the full transformation, dress piece by piece, and take one before-and-after comparison.",
+      "Spend 15 minutes turning into the selected character, ending with the completed look and one caption."
+    ],
+    "Roleplay scenario": [
+      "Act out a 5-minute introduction for the character: name, outfit, purpose, and what they are about to do.",
+      "Enter the room already dressed and explain out loud why the character looks this way.",
+      "Perform the activity as the selected character for 10 minutes, using the outfit and mood tags as the role."
+    ],
+    "Hookup fantasy": [
+      "Create a hookup fantasy scene: outfit reveal, first message, arrival moment, and first reaction.",
+      "Write or imagine a private hookup setup where the character arrives dressed exactly like this.",
+      "Make the main scene a fictional hookup built around the outfit and selected kink tags."
+    ],
+    "Stranger fantasy": [
+      "Imagine an anonymous viewer seeing the outfit and reacting to 5 specific details.",
+      "Build the scene around being looked over slowly by a stranger who understands the outfit immediately.",
+      "Write a private stranger-fantasy setup: where it happens, what they notice first, and what the outfit gives away."
+    ],
+    "Slut training fantasy": [
+      "Do a training sequence: 3 poses, 3 repeated lines, 3 minutes of teasing, and one final character pose.",
+      "Spend 10 minutes on slut training: posture, caption, teasing, and presentation.",
+      "Train the character to look and act more openly sexual using the outfit as the uniform."
+    ],
+    "Service slut fantasy": [
+      "Do the selected chore or a 10-minute service task while dressed as decorative help.",
+      "Present the finished task while posing beside it in the outfit.",
+      "Turn the activity into service roleplay: dressed to serve, displayed while working, posed at the end."
+    ]
+  };
+
+  if (primary && direct[primary]) return sample(direct[primary]);
+  if (hasTag(tags, "Dress-up")) return sample(direct["Transformation"]);
+  return "Do a 15-minute outfit presentation: 3 poses, one short walk, one close-up detail, and one final full-body pose.";
+}
+
+function buildKinkFantasy(tags) {
+  const order = ["Sissy exposure", "Exhibition fantasy", "Public shame fantasy", "Hookup fantasy", "Stranger fantasy", "Slut training fantasy", "Service slut fantasy", "Bimbo corruption", "Forced feminization fantasy"];
+  const picked = order.filter(tag => hasTag(tags, tag));
+  if (!picked.length) return null;
+
+  const concrete = {
+    "Sissy exposure": [
+      "Make the fantasy about the finished sissy look being obvious: outfit, makeup, posture, and photo angle all show the transformation clearly.",
+      "Add a reveal moment where the full outfit is shown all at once: front view, back view, makeup close-up, and final pose.",
+      "Center the scene on being visibly transformed and unable to make the look seem casual."
+    ],
+    "Exhibition fantasy": [
+      "Frame the scene like an exhibition: the outfit is displayed from head to toe, with no hiding the shoes, makeup, or silhouette.",
+      "Make the final image look staged for an audience: full body, direct posture, obvious outfit details.",
+      "Build the scene around being watched from dressing through the finished pose."
+    ],
+    "Public shame fantasy": [
+      "Add a public-shame angle: the outfit is too obvious, too sexual, and too memorable to pass as normal.",
+      "Write 3 imagined reactions to the finished look: one teasing, one shocked, and one approving.",
+      "Make the fantasy about being overdressed, exposed, and instantly judged by an imagined crowd."
+    ],
+    "Hookup fantasy": [
+      "Add a hookup angle: the outfit is chosen to make the character look available, nervous, and easy to read.",
+      "Write the first message, the arrival outfit check, and the first reaction to the finished look.",
+      "Make the fantasy feel like the outfit was selected specifically for a private adult encounter."
+    ],
+    "Stranger fantasy": [
+      "Add an anonymous-viewer angle: imagine them noticing the heels first, then the makeup, then the outfit shape.",
+      "Make the fantasy about being silently inspected by someone who immediately understands the role.",
+      "Describe 5 things a stranger would notice about the finished look."
+    ],
+    "Slut training fantasy": [
+      "Make it a training scene: 3 poses, 3 repeated lines, 3 minutes of teasing, then one final character pose.",
+      "Use the outfit as the training uniform and make the goal look more shameless by the end.",
+      "Add a training progression: pose correctly, speak the line, tease briefly, repeat three times."
+    ],
+    "Service slut fantasy": [
+      "Make the activity feel like sexualized service: dressed up, useful, decorative, and clearly on display.",
+      "Finish by presenting the completed task beside the outfit like both are part of the service.",
+      "Frame the character as dressed to serve while still being looked at."
+    ],
+    "Bimbo corruption": [
+      "Push the bimbo angle: glossier lips, dumber pose, softer expression, brighter colors, and a shameless caption.",
+      "Make the final look more bimbo than subtle: lips, lashes, chest, hips, and empty-headed pose emphasized.",
+      "Add a before-and-after caption showing the character becoming more bimbo and less careful."
+    ],
+    "Forced feminization fantasy": [
+      "Frame it as a feminization fantasy: the finished outfit proves the transformation is complete.",
+      "Make the scene about being styled into the selected look until the original self is hard to recognize.",
+      "Emphasize hair, makeup, shoes, posture, and the final feminine presentation."
+    ]
+  };
+
+  return picked.slice(0, 2).map(tag => sample(concrete[tag])).join("\n");
 }
 
 function buildExposure(tags, style) {
@@ -486,17 +610,6 @@ function buildExposure(tags, style) {
   if (chosen === "trusted_sharing" && !state.settings.allowTrustedSharingPrompts) chosen = "anonymous_caption";
   if (chosen === "real_public_posting" && !state.settings.allowRealPublicPostingPrompts) chosen = "public_posting_fantasy";
   return sample(exposureTemplates[chosen]);
-}
-
-function buildTiming(length) {
-  const plans = {
-    quick: "5 minutes dressing → 10 minutes main activity → 5 minutes kink/exposure ending",
-    30: "10 minutes dressing → 15 minutes main activity → 5 minutes kink/exposure ending",
-    45: "15 minutes dressing → 20 minutes main activity → 10 minutes kink/exposure ending",
-    60: "20 minutes dressing → 25 minutes main activity → 15 minutes kink/exposure ending",
-    open: "Dress fully → complete the rolled activity once → finish with the rolled kink/exposure layer"
-  };
-  return plans[length];
 }
 
 function buildTitle(tags, outfitTitle) {
@@ -514,19 +627,14 @@ function generateSession(overrides = {}) {
   const outfit = selectOutfit(tags);
   const chore = selectChore(tags);
   const exposure = buildExposure(tags, exposureStyle);
+  const kinkFantasy = buildKinkFantasy(tags);
   const sections = [
-    { label: "Setup", text: sample(sceneSetups[realityLevel]) },
     { label: "Outfit", text: `${outfit.title}: ${applyOutfitLevel(outfit.text, level)}` },
-    { label: "Timing", text: buildTiming(length) },
-    { label: "Main activity", text: buildMainActivity(tags, chore) },
-    { label: "Kink / fantasy layer", text: buildSexualFocus(tags) }
+    { label: "Main activity", text: buildMainActivity(tags, chore) }
   ];
-  if (exposure) sections.push({ label: "Exposure / photo layer", text: exposure });
-  sections.push({ label: "Final beat", text: sample([
-    "Finish with one still pose and one sentence that matches the character.",
-    "End by checking the full outfit in the mirror and holding the final pose for 60 seconds.",
-    "End with a final caption for the session title and one last full-body pose."
-  ]) });
+
+  if (kinkFantasy) sections.push({ label: "Kink / fantasy", text: kinkFantasy });
+  if (exposure) sections.push({ label: "Exposure / photo", text: exposure });
 
   const session = {
     id: id(),
