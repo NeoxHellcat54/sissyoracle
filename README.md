@@ -1,32 +1,36 @@
-# The Great Oracle of Sissy Sluts — Guided PWA Starter
+# The Great Oracle of Sissy Sluts — PWA Starter
 
-A small offline-first PWA fantasy/session roller.
+A local-first guided PWA session roller.
 
 ## Current flow
 
-1. Home page
-   - Speak with the Oracle
-   - Settings menu
-   - Saved sessions
+1. Home
+2. Settings menu
+3. This Sissy Slut wishes to speak with the Oracle
+4. Outfit prompts, max 2
+5. How do you wish to be treated?, max 2
+6. Activity prompts, unlimited
+7. Generated session
 
-2. Outfit step
-   - The Oracle asks: “So then, how is this Sissy Slut imagining her outfit?”
-   - User selects up to 2 outfit prompts.
+## Current systems
 
-3. Treatment step
-   - The Oracle asks: “How do you wish to be treated?”
-   - User selects up to 2 treatment prompts.
+### Outfit prompts
 
-4. Activity step
-   - The Oracle asks: “What would you like to do today?”
-   - User selects as many activity prompts as desired.
+The app now uses 20 outfit prompts:
 
-5. Result
-   - Concrete outfit
-   - Treatment tone
-   - Specific task list generated from the selected activities
+Maid, Goth, Latex, Princess, Bimbo, Party Slut, Stripper, Schoolgirl, Lingerie, Doll, Casual Slut, Office Slut, Housewife, Pet, Cheerleader, Bride, Nurse, Pornstar, E-Girl, Emo.
 
-## Preview locally
+Each prompt has variety pools for underwear, main outfit, overlay, legwear, shoes, hair, and makeup. Special wardrobe items can be added for any prompt. Defaults include Princess Belle dress, Princess Elsa dress, black/red/pink latex catsuits, and latex maid dress.
+
+### Treatment prompts
+
+Treatment prompts affect the Oracle's wording only. There is no separate Treatment section in the final result.
+
+### Activities
+
+The app uses 30 activity prompts, with unlimited selection. Activities can generate individual tasks or combine into task chains. Captions, confessions, messages, posts, and photo titles are generated as exact text.
+
+## Local preview
 
 ```bash
 python3 -m http.server 8080
@@ -34,10 +38,6 @@ python3 -m http.server 8080
 
 Then open `http://localhost:8080`.
 
-## Files
+## Deployment
 
-- `index.html` — guided page flow
-- `styles.css` — layout and theme
-- `app.js` — prompts, templates, settings, chore list, generator logic
-- `manifest.json` — PWA metadata
-- `sw.js` — offline cache
+This can be uploaded to GitHub Pages, Netlify, Vercel, or any static host. It stores data locally in the browser using localStorage.

@@ -13,7 +13,7 @@
     <div>
       <p class="eyebrow">Fantasy session roller</p>
       <h1>The Great Oracle of Sissy Sluts</h1>
-      <p class="subtitle">A guided Oracle flow for outfit, treatment, and session tasks.</p>
+      <p class="subtitle">A guided Oracle flow for outfit prompts, verbal treatment, and direct session tasks.</p>
     </div>
   </header>
 
@@ -21,7 +21,7 @@
     <section id="homeView" class="view active">
       <div class="card hero-card">
         <h2>Home</h2>
-        <p>Speak with the Oracle or define your settings, chores, and allowed session ingredients.</p>
+        <p>Speak with the Oracle or define chores, special wardrobe items, and toys.</p>
         <div class="home-actions">
           <button id="startOracleBtn" class="primary huge">This Sissy Slut wishes to speak with the Oracle</button>
           <button id="openSettingsBtn" class="secondary huge">Settings menu</button>
@@ -48,6 +48,7 @@
       <section class="grid two-col">
         <div class="card">
           <h2>Chore list</h2>
+          <p class="muted">Used when Chores or Maid Service is selected.</p>
           <form id="choreForm" class="inline-form">
             <input id="choreName" type="text" placeholder="e.g. Clean bedroom surfaces" required />
             <select id="choreRoom">
@@ -70,9 +71,20 @@
         </div>
 
         <div class="card">
-          <h2>Oracle settings</h2>
-          <div id="settingsList" class="settings-list"></div>
+          <h2>Toy / kink item list</h2>
+          <p class="muted">Used by Toy Use, Plug Wearing, Dildo Use, Vibrator Use, Bondage, Chastity, and related activities.</p>
+          <form id="toyForm" class="inline-form short-form">
+            <input id="toyName" type="text" placeholder="e.g. Large plug" required />
+            <button class="secondary" type="submit">Add</button>
+          </form>
+          <ul id="toyList" class="list"></ul>
         </div>
+      </section>
+
+      <section class="card">
+        <h2>Special wardrobe</h2>
+        <p class="muted">Optional exact items for specific outfit prompts. The Oracle can use these or ignore them when a freer roll works better.</p>
+        <div id="settingsList" class="settings-list"></div>
       </section>
     </section>
 

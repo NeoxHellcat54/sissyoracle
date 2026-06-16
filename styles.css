@@ -122,3 +122,9 @@ code { color: #ffd2f2; }
   .button-row.spread { align-items: stretch; flex-direction: column; }
   .result-topline { flex-direction: column; }
 }
+.setting-row.vertical { align-items: stretch; flex-direction: column; }
+.setting-title small { display: block; color: var(--muted); margin-top: 4px; line-height: 1.35; }
+.mini-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.mini-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag-chip.small { padding: 7px 10px; font-size: .86rem; }
+.inline-form.short-form { grid-template-columns: 1fr auto; }
