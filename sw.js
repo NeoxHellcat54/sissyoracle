@@ -1,4 +1,4 @@
-const CACHE_NAME = "sissy-oracle-pwa-v4";
+const CACHE_NAME = "sissy-oracle-pwa-v5";
 const ASSETS = [
   "./",
   "./index.html",

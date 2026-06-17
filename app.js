@@ -1,4 +1,4 @@
-const STORAGE_KEY = "sissyOraclePwa.guided.v2";
+const STORAGE_KEY = "sissyOraclePwa.guided.v3";
 
 const outfitPrompts = [
   "Maid", "Goth", "Latex", "Princess", "Bimbo", "Party Slut", "Stripper", "Schoolgirl", "Lingerie", "Doll",
@@ -16,6 +16,25 @@ const activityPrompts = [
   "Vibrator Use", "Oral Training", "Chastity", "Bondage", "Maid Service", "Bimbo Training", "Sissy Training", "Doll Training", "Pet Play", "Hookup"
 ];
 
+const activityGroups = [
+  {
+    label: "Useful / display",
+    items: ["Chores", "Cleaning", "Dress-up", "Maid Service"]
+  },
+  {
+    label: "Photos / exposure",
+    items: ["Photo Set", "Captions", "Private Photos", "Online Exposure", "Public Walk", "Public Exhibition", "Sissy Exposure", "Confession"]
+  },
+  {
+    label: "Sex / control",
+    items: ["Pain", "Hypno", "Edging", "Denial", "Orgasm Control", "Toy Use", "Plug Wearing", "Anal Training", "Dildo Use", "Vibrator Use", "Oral Training", "Chastity", "Bondage"]
+  },
+  {
+    label: "Training / roleplay",
+    items: ["Bimbo Training", "Sissy Training", "Doll Training", "Pet Play", "Hookup"]
+  }
+];
+
 const defaultSpecialWardrobe = {
   Princess: ["Princess Belle dress", "Princess Elsa dress"],
   Latex: ["Black latex catsuit", "Red latex catsuit", "Pink latex catsuit", "Latex maid dress"],
@@ -28,7 +47,7 @@ const defaultToys = [
 
 const defaultChores = [
   { id: uid(), name: "Clean bedroom surfaces", room: "Bedroom", duration: 15 },
-  { id: uid(), name: "Tidy clothes or laundry", room: "Laundry", duration: 15 },
+  { id: uid(), name: "Tidy laundry", room: "Laundry", duration: 15 },
   { id: uid(), name: "Wipe bathroom sink", room: "Bathroom", duration: 10 }
 ];
 
@@ -277,28 +296,55 @@ function showView(id) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+function makePromptButton(prompt, selected, max) {
+  const active = selected.includes(prompt);
+  const disabled = !active && max && selected.length >= max;
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = `tag-chip ${active ? "active" : ""} ${disabled ? "disabled" : ""}`;
+  btn.textContent = prompt;
+  btn.setAttribute("aria-pressed", active ? "true" : "false");
+  btn.addEventListener("click", () => {
+    if (active) selected.splice(selected.indexOf(prompt), 1);
+    else if (!max || selected.length < max) selected.push(prompt);
+    renderAllPrompts();
+  });
+  return btn;
+}
+
 function renderPromptGrid(rootId, prompts, selected, max) {
   const root = document.querySelector(`#${rootId}`);
   root.innerHTML = "";
-  prompts.forEach(prompt => {
-    const active = selected.includes(prompt);
-    const disabled = !active && max && selected.length >= max;
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = `tag-chip ${active ? "active" : ""} ${disabled ? "disabled" : ""}`;
-    btn.textContent = prompt;
-    btn.addEventListener("click", () => {
-      if (active) selected.splice(selected.indexOf(prompt), 1);
-      else if (!max || selected.length < max) selected.push(prompt);
-      renderAllPrompts();
-    });
-    root.appendChild(btn);
+  prompts.forEach(prompt => root.appendChild(makePromptButton(prompt, selected, max)));
+}
+
+function renderActivityGrid() {
+  const root = document.querySelector("#activityPromptGrid");
+  root.innerHTML = "";
+  activityGroups.forEach(group => {
+    const wrap = document.createElement("section");
+    wrap.className = "activity-group";
+    wrap.innerHTML = `<div class="activity-group-title">${group.label}</div><div class="tag-grid"></div>`;
+    const grid = wrap.querySelector(".tag-grid");
+    group.items.forEach(prompt => grid.appendChild(makePromptButton(prompt, oracle.activities, null)));
+    root.appendChild(wrap);
   });
 }
+
+function updateSelectionCounts() {
+  const outfitCount = document.querySelector("#outfitCount");
+  const treatmentCount = document.querySelector("#treatmentCount");
+  const activityCount = document.querySelector("#activityCount");
+  if (outfitCount) outfitCount.textContent = `${oracle.outfit.length} / 2`;
+  if (treatmentCount) treatmentCount.textContent = `${oracle.treatment.length} / 2`;
+  if (activityCount) activityCount.textContent = `${oracle.activities.length} selected`;
+}
+
 function renderAllPrompts() {
   renderPromptGrid("outfitPromptGrid", outfitPrompts, oracle.outfit, 2);
   renderPromptGrid("treatmentPromptGrid", treatmentPrompts, oracle.treatment, 2);
-  renderPromptGrid("activityPromptGrid", activityPrompts, oracle.activities, null);
+  renderActivityGrid();
+  updateSelectionCounts();
 }
 
 function renderSpecialWardrobe() {
@@ -432,20 +478,38 @@ function fill(template, data) {
 
 function toneProfile() {
   const tones = oracle.treatment.length ? oracle.treatment : ["Strict"];
-  return {
-    tones,
-    prefix: tones.includes("Mean") ? "No soft version: " : tones.includes("Gentle") ? "Softly but clearly: " : "",
-    ending: tones.includes("Obedient") ? " Do it cleanly and in order." : tones.includes("Bratty") ? " Make it look smug, overconfident, and too pleased with itself." : "",
-  };
+  let prefix = "";
+  if (tones.includes("Humiliating") && tones.includes("Degrading")) prefix = "Pathetic little sissy slut, ";
+  else if (tones.includes("Degrading")) prefix = "Filthy little sissy, ";
+  else if (tones.includes("Humiliating")) prefix = "Embarrass yourself properly: ";
+  else if (tones.includes("Mean")) prefix = "No soft version: ";
+  else if (tones.includes("Gentle")) prefix = "Softly but clearly: ";
+  else if (tones.includes("Worshipful")) prefix = "Present yourself beautifully: ";
+
+  const endings = [];
+  if (tones.includes("Strict")) endings.push("Follow the instruction exactly.");
+  if (tones.includes("Obedient")) endings.push("Do it cleanly and in order.");
+  if (tones.includes("Bratty")) endings.push("Make it look smug, overconfident, and too pleased with itself.");
+  if (tones.includes("Objectifying")) endings.push("Treat the outfit like the only thing about you that matters.");
+  if (tones.includes("Training")) endings.push("Treat it like a training drill.");
+  if (tones.includes("Service")) endings.push("Make yourself useful while you do it.");
+  if (tones.includes("Pornstar")) endings.push("Make it camera-ready.");
+  if (tones.includes("Doll-like")) endings.push("Keep the final look stiff, posed, and artificial.");
+  if (tones.includes("Bimbo")) endings.push("Keep it glossy, dumb, and attention-hungry.");
+  return { tones, prefix, ending: endings.length ? " " + sample(endings) : "" };
 }
 function phrase(text) {
   const tone = toneProfile();
   let out = `${tone.prefix}${text}${tone.ending}`;
   if (tone.tones.includes("Humiliating")) out = out.replace(/\.$/, ", making the outfit impossible to ignore.");
-  if (tone.tones.includes("Degrading")) out = out.replace(/\.$/, ", like a proper sissy slut.");
-  if (tone.tones.includes("Bimbo")) out = out.replace(/\.$/, ", with glossy dumb-slut energy.");
-  if (tone.tones.includes("Doll-like")) out = out.replace(/\.$/, ", posed like a dressed-up doll.");
-  if (tone.tones.includes("Pornstar")) out = out.replace(/\.$/, ", like the camera is already on.");
+  if (tone.tones.includes("Degrading")) out = out.replace(/\.$/, ", because that is what a proper little slut is for.");
+  if (tone.tones.includes("Mean")) out = out.replace(/\.$/, ", and do not pretend this is dignified.");
+  if (tone.tones.includes("Embarrassing")) out = out.replace(/\.$/, ", with the embarrassment made obvious.");
+  if (tone.tones.includes("Nervous")) out = out.replace(/\.$/, ", while looking nervous enough to be caught.");
+  if (tone.tones.includes("Playful")) out = out.replace(/\.$/, ", and make it look like a dirty little game.");
+  if (tone.tones.includes("Spoiling")) out = out.replace(/\.$/, ", like a spoiled slut who got overdressed on purpose.");
+  if (tone.tones.includes("Romantic")) out = out.replace(/\.$/, ", with a soft seductive finish.");
+  if (tone.tones.includes("Chaotic")) out = out.replace(/\.$/, ", then push the result one step more ridiculous.");
   return out;
 }
 function captionFor(kind, outfitTitle = "outfit") {
@@ -499,7 +563,6 @@ function buildActivityTasks(outfit) {
 
   const hasChore = has(a, "Chores") || has(a, "Maid Service");
   const hasCleaning = has(a, "Cleaning");
-  const hasPhotos = has(a, "Photo Set") || has(a, "Private Photos") || has(a, "Online Exposure") || has(a, "Sissy Exposure");
   const hasPost = has(a, "Online Exposure");
   const hasWalk = has(a, "Public Walk");
   const hasPublic = has(a, "Public Exhibition");
@@ -513,46 +576,78 @@ function buildActivityTasks(outfit) {
   if (has(a, "Dress-up")) add(`Show off the completed outfit with 5 poses: front view, side view, back view, kneeling pose, and one makeup-focused close-up.`);
 
   if (hasChore) add(`Complete ${chore.name.toLowerCase()} in the ${chore.room.toLowerCase()} for ${chore.duration} minutes while wearing the full outfit.`);
-  else if (hasCleaning) add(`Clean one visible area for 15 minutes while staying in the full outfit.`);
+  else if (hasCleaning) add(`Clean ${sample(["the bedroom floor", "the bathroom mirror", "one visible table", "the sink area", "one messy corner"])} for 15 minutes while staying in the full outfit.`);
 
   if (hasWalk && hasPlug) add(`Go for a 10-minute walk in the outfit while wearing a ${toyOf(["plug"])}.`);
-  else if (hasWalk) add(`Go for a 10-minute walk in the outfit. Make one visible detail obvious: heels, stockings, makeup, wig, skirt, or dress.`);
+  else if (hasWalk) add(`Go for a 10-minute walk in the outfit with ${sample(["the heels", "the stockings", "the makeup", "the wig", "the skirt", "the dress"])} clearly visible.`);
 
-  if (hasPublic) add(`Create a public exhibition moment: stand near a window, doorway, balcony, or outside step in the full outfit for 2 minutes and hold one clear pose.`);
+  if (hasPublic) add(`${sample([
+    "Stand near a window in the full outfit for 2 minutes and hold one clear pose.",
+    "Step outside in the full outfit for 60 seconds and hold one pose.",
+    "Stand in a doorway in the full outfit for 90 seconds and face outward.",
+    "Take one public-facing photo in the outfit and title it \"Too dressed up to hide.\""
+  ])}`);
 
-  if (has(a, "Pain")) add(`Add one broad pain element: spanking, CBT, clamps, kneeling, endurance, or discomfort. Keep it tied to the outfit and continue after it is done.`);
+  if (has(a, "Pain")) add(`${sample([
+    "Give yourself 20 spanks while wearing the full outfit.",
+    "Complete a CBT-focused pain task for 3 minutes before continuing.",
+    "Wear nipple clamps for 5 minutes while holding a pose in the outfit.",
+    "Kneel in the outfit for 5 minutes without adjusting the clothes.",
+    "Do 10 spanks, take one outfit photo, then do 10 more."
+  ])}`);
 
-  if (has(a, "Hypno")) add(`Watch one sissy hypno video or browse sissy captions for 10 minutes. Save or write down 3 captions that hit hardest, then repeat this Oracle caption 10 times: "${captionFor("confession", outfit.title)}"`);
+  if (has(a, "Hypno")) add(`${sample([
+    `Watch one sissy hypno video for 10 minutes while wearing the full outfit. Then repeat this Oracle caption 10 times: "${captionFor("confession", outfit.title)}"`,
+    `Browse sissy captions for 10 minutes. Save the 3 that hit hardest and write this caption underneath them: "${captionFor("confession", outfit.title)}"`,
+    `Collect 5 sissy captions that match the outfit. Read each one out loud once, then repeat this final line 10 times: "${captionFor("confession", outfit.title)}"`,
+    `Watch one sissy hypno video until it ends. Keep the outfit fully on and write this sentence afterward: "${captionFor("confession", outfit.title)}"`
+  ])}`);
 
   if (hasAnal && hasPlug && hasDildo) add(`Do anal training in two parts: wear a ${toyOf(["plug"])} for 10 minutes, then use a ${toyOf(["dildo"])} for 5 minutes.`);
   else if (hasAnal && hasPlug) add(`Start anal training by wearing a ${toyOf(["plug"])} for 15 minutes in the full outfit.`);
   else if (hasAnal) add(`Complete 15 minutes of anal training in the full outfit.`);
 
   if (hasOral && hasDildo) add(`Complete oral training with a ${toyOf(["dildo"])}: 3 rounds, 1 minute each, while staying in the full outfit.`);
-  else if (hasOral) add(`Complete an oral training sequence in the outfit: 5 repeated practice rounds with controlled posture and makeup kept neat.`);
+  else if (hasOral) add(`Complete oral training in the outfit: 5 repeated practice rounds with controlled posture and makeup kept neat.`);
 
   if (hasDildo && !hasAnal && !hasOral) add(`Use a ${toyOf(["dildo"])} for 10 minutes while wearing the full outfit.`);
   if (hasVibe) add(`Use a ${toyOf(["vibrator"])} for 8 minutes in the outfit.`);
-  if (hasToy && !hasDildo && !hasVibe && !hasPlug) add(`Use one toy from the toy list for 10 minutes while keeping the outfit fully on.`);
+  if (hasToy && !hasDildo && !hasVibe && !hasPlug) add(`Use the ${toyOf()} for 10 minutes while keeping the outfit fully on.`);
 
   if (has(a, "Edging")) add(`Edge 3 times in the outfit, stopping before orgasm each time.`);
   if (has(a, "Denial")) add(`Complete the sexual part without orgasm and stay dressed for 10 minutes after stopping.`);
   if (has(a, "Orgasm Control")) add(`At the end, roll once: 1–2 denied, 3–4 ruined orgasm, 5–6 orgasm allowed.`);
   if (has(a, "Chastity")) add(`Put on chastity before the outfit and keep it on through every selected task.`);
-  if (has(a, "Bondage")) add(`Add one bondage element for 10 minutes: wrists restrained, ankles limited, blindfold, collar, gag, or another restriction from the toy list.`);
+  if (has(a, "Bondage")) add(`${sample([
+    "Spend 10 minutes with wrists restrained while wearing the full outfit.",
+    "Spend 10 minutes with ankles limited while wearing the full outfit.",
+    "Wear a blindfold for 10 minutes during the next selected task.",
+    "Wear a collar for the rest of the session.",
+    "Use a gag during the next photo task."
+  ])}`);
 
   if (has(a, "Bimbo Training")) add(`Do a bimbo training set: 3 poses, 3 dumb captions, and one repeated line: "Glossy lips, empty head, dressed for attention."`);
-  if (has(a, "Sissy Training")) add(`Complete a sissy training sequence: 3 poses, 3 repeated lines, and one selected sexual or exposure task.`);
+  if (has(a, "Sissy Training")) add(`Complete a sissy training sequence: 3 poses, 3 repeated lines, and the most sexual selected task.`);
   if (has(a, "Doll Training")) add(`Hold 3 doll poses for 60 seconds each in the full outfit.`);
-  if (has(a, "Pet Play")) add(`Spend 10 minutes in pet mode: kneel, crawl, pose, and hold still. Use collar, leash, ears, or tail if they fit the outfit.`);
+  if (has(a, "Pet Play")) add(`${sample([
+    "Spend 10 minutes in pet mode: kneel, crawl, pose, and hold still.",
+    "Wear a collar and hold a pet pose for 3 minutes.",
+    "Crawl across the room once in the outfit, then hold one pet pose for 60 seconds.",
+    `Take one pet-style photo with this caption: "${captionFor("post", outfit.title)}"`
+  ])}`);
 
-  if (has(a, "Confession")) add(`Write or say this confession exactly: "${captionFor("confession", outfit.title)}"`);
-  if (has(a, "Captions")) add(`Generate and use these 3 captions: 1. "${captionFor("post", outfit.title)}" 2. "${captionFor("post", outfit.title)}" 3. "${captionFor("post", outfit.title)}"`);
+  if (has(a, "Confession")) add(`Write this confession exactly: "${captionFor("confession", outfit.title)}"`);
+  if (has(a, "Captions")) add(`Use these 3 exact captions: 1. "${captionFor("post", outfit.title)}" 2. "${captionFor("post", outfit.title)}" 3. "${captionFor("post", outfit.title)}"`);
 
-  if (has(a, "Private Photos")) add(`Take one full-body outfit photo and set it as your phone wallpaper or lock screen for the rest of the session. Use this caption privately: "${caption}"`);
+  if (has(a, "Private Photos")) add(`${sample([
+    `Take one full-body outfit photo and set it as your phone wallpaper for the rest of the session. Use this caption privately: "${caption}"`,
+    `Take one full-body outfit photo and set it as your lock screen for the rest of the session. Use this caption privately: "${caption}"`,
+    `Create a private album titled "${caption}" and save 3 outfit photos in it.`,
+    `Take 4 private photos: underwear detail, full outfit, shoes, and final pose. Save them under this title: "${caption}"`
+  ])}`);
   else if (has(a, "Photo Set")) add(`Take 6 photos: full outfit front, full outfit back, underwear detail, shoes/legwear close-up, action shot, and final pose.`);
 
-  if (has(a, "Sissy Exposure") && !hasPost) add(`Make one exposure record: take or imagine one outfit photo and title it "Proof I dressed like this willingly."`);
+  if (has(a, "Sissy Exposure") && !hasPost) add(`Take one outfit photo and title it "Proof I dressed like this willingly."`);
   if (hasPost) add(`Post one outfit photo online with this exact caption: "${caption}"`);
 
   if (has(a, "Hookup")) {
@@ -565,7 +660,7 @@ function buildActivityTasks(outfit) {
     add(`Look for a hookup with the first guy you find on Grindr. Send this exact message: "${msg}"`);
   }
 
-  if (!tasks.length) add(`Do a 20-minute outfit session: show off the full look, take one photo, write one caption, and hold a final pose.`);
+  if (!tasks.length) add(`Do a 20-minute outfit session: show off the full look, take one photo, write this caption exactly: "${captionFor("post", outfit.title)}", and hold a final pose.`);
   return combineTasks(tasks, a);
 }
 

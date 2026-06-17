@@ -4,8 +4,8 @@
   "description": "A fantasy and roleplay session generator PWA.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#100012",
-  "theme_color": "#120014",
+  "background_color": "#08020d",
+  "theme_color": "#08020d",
   "orientation": "portrait-primary",
   "icons": [
     {

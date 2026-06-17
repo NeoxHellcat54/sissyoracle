@@ -1,6 +1,6 @@
 # The Great Oracle of Sissy Sluts — PWA Starter
 
-A local-first guided PWA session roller.
+A local-first guided PWA session roller with a Dark Oracle / Occult Tarot UI.
 
 ## Current flow
 
@@ -12,11 +12,23 @@ A local-first guided PWA session roller.
 6. Activity prompts, unlimited
 7. Generated session
 
+## Current UI
+
+The app now uses the locked Dark Oracle / Occult Tarot direction:
+
+- deep black/purple background
+- hot pink glow accents
+- gold tarot-card borders
+- glowing selected prompt chips
+- grouped activity sections
+- revealed result cards
+- mobile-first layout
+
 ## Current systems
 
 ### Outfit prompts
 
-The app now uses 20 outfit prompts:
+The app uses 20 outfit prompts:
 
 Maid, Goth, Latex, Princess, Bimbo, Party Slut, Stripper, Schoolgirl, Lingerie, Doll, Casual Slut, Office Slut, Housewife, Pet, Cheerleader, Bride, Nurse, Pornstar, E-Girl, Emo.
 
