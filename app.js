@@ -478,38 +478,45 @@ function fill(template, data) {
 
 function toneProfile() {
   const tones = oracle.treatment.length ? oracle.treatment : ["Strict"];
-  let prefix = "";
-  if (tones.includes("Humiliating") && tones.includes("Degrading")) prefix = "Pathetic little sissy slut, ";
-  else if (tones.includes("Degrading")) prefix = "Filthy little sissy, ";
-  else if (tones.includes("Humiliating")) prefix = "Embarrass yourself properly: ";
-  else if (tones.includes("Mean")) prefix = "No soft version: ";
-  else if (tones.includes("Gentle")) prefix = "Softly but clearly: ";
-  else if (tones.includes("Worshipful")) prefix = "Present yourself beautifully: ";
+  const openers = [];
+  if (tones.includes("Humiliating") && tones.includes("Degrading")) {
+    openers.push("Pathetic little sissy slut, ", "Filthy little showpiece, ", "Embarrassing little slut, ");
+  } else {
+    if (tones.includes("Degrading")) openers.push("Filthy little sissy, ", "Dirty little slut, ");
+    if (tones.includes("Humiliating")) openers.push("Embarrass yourself properly: ", "Make it humiliating: ");
+  }
+  if (tones.includes("Mean")) openers.push("No soft version: ");
+  if (tones.includes("Gentle")) openers.push("Softly but clearly: ");
+  if (tones.includes("Worshipful")) openers.push("Present yourself beautifully: ");
+  if (tones.includes("Bimbo")) openers.push("Empty-headed and glossy, ");
+  if (tones.includes("Pornstar")) openers.push("Camera-ready, ");
+  if (tones.includes("Doll-like")) openers.push("Still and doll-like, ");
+  if (tones.includes("Bratty")) openers.push("With too much smug confidence, ");
 
-  const endings = [];
-  if (tones.includes("Strict")) endings.push("Follow the instruction exactly.");
-  if (tones.includes("Obedient")) endings.push("Do it cleanly and in order.");
-  if (tones.includes("Bratty")) endings.push("Make it look smug, overconfident, and too pleased with itself.");
-  if (tones.includes("Objectifying")) endings.push("Treat the outfit like the only thing about you that matters.");
-  if (tones.includes("Training")) endings.push("Treat it like a training drill.");
-  if (tones.includes("Service")) endings.push("Make yourself useful while you do it.");
-  if (tones.includes("Pornstar")) endings.push("Make it camera-ready.");
-  if (tones.includes("Doll-like")) endings.push("Keep the final look stiff, posed, and artificial.");
-  if (tones.includes("Bimbo")) endings.push("Keep it glossy, dumb, and attention-hungry.");
-  return { tones, prefix, ending: endings.length ? " " + sample(endings) : "" };
+  const closers = [];
+  if (tones.includes("Strict")) closers.push("Do it cleanly and in order.");
+  if (tones.includes("Obedient")) closers.push("Do exactly what the task says.");
+  if (tones.includes("Training")) closers.push("Count it like a training drill.");
+  if (tones.includes("Service")) closers.push("Make yourself useful.");
+  if (tones.includes("Objectifying")) closers.push("Act like decoration, not a person.");
+  if (tones.includes("Pornstar")) closers.push("Make the result camera-ready.");
+  if (tones.includes("Doll-like")) closers.push("Hold the presentation stiff and artificial.");
+  if (tones.includes("Bimbo")) closers.push("Keep it glossy, dumb, and attention-hungry.");
+  if (tones.includes("Playful")) closers.push("Make it feel like a dirty little game.");
+  if (tones.includes("Spoiling")) closers.push("Make it look spoiled and overdone.");
+  if (tones.includes("Romantic")) closers.push("Finish it softly and seductively.");
+  if (tones.includes("Chaotic")) closers.push("Push it one step more ridiculous.");
+  if (tones.includes("Embarrassing")) closers.push("Make the embarrassment obvious.");
+  if (tones.includes("Nervous")) closers.push("Make it look nervous enough to be caught.");
+  return { tones, opener: openers.length ? sample(openers) : "", closer: closers.length ? sample(closers) : "" };
 }
 function phrase(text) {
   const tone = toneProfile();
-  let out = `${tone.prefix}${text}${tone.ending}`;
-  if (tone.tones.includes("Humiliating")) out = out.replace(/\.$/, ", making the outfit impossible to ignore.");
-  if (tone.tones.includes("Degrading")) out = out.replace(/\.$/, ", because that is what a proper little slut is for.");
-  if (tone.tones.includes("Mean")) out = out.replace(/\.$/, ", and do not pretend this is dignified.");
-  if (tone.tones.includes("Embarrassing")) out = out.replace(/\.$/, ", with the embarrassment made obvious.");
-  if (tone.tones.includes("Nervous")) out = out.replace(/\.$/, ", while looking nervous enough to be caught.");
-  if (tone.tones.includes("Playful")) out = out.replace(/\.$/, ", and make it look like a dirty little game.");
-  if (tone.tones.includes("Spoiling")) out = out.replace(/\.$/, ", like a spoiled slut who got overdressed on purpose.");
-  if (tone.tones.includes("Romantic")) out = out.replace(/\.$/, ", with a soft seductive finish.");
-  if (tone.tones.includes("Chaotic")) out = out.replace(/\.$/, ", then push the result one step more ridiculous.");
+  let out = `${tone.opener}${text}`;
+  if (tone.closer && Math.random() < 0.72) out = `${out} ${tone.closer}`;
+  if (tone.tones.includes("Humiliating") && Math.random() < 0.45) out = out.replace(/\.$/, ", and make the shame visible.");
+  if (tone.tones.includes("Degrading") && Math.random() < 0.45) out = out.replace(/\.$/, ", because that is what a proper little slut is for.");
+  if (tone.tones.includes("Mean") && Math.random() < 0.35) out = out.replace(/\.$/, ", and do not pretend this is dignified.");
   return out;
 }
 function captionFor(kind, outfitTitle = "outfit") {
@@ -575,52 +582,52 @@ function buildActivityTasks(outfit) {
 
   if (has(a, "Dress-up")) add(`Show off the completed outfit with 5 poses: front view, side view, back view, kneeling pose, and one makeup-focused close-up.`);
 
-  if (hasChore) add(`Complete ${chore.name.toLowerCase()} in the ${chore.room.toLowerCase()} for ${chore.duration} minutes while wearing the full outfit.`);
-  else if (hasCleaning) add(`Clean ${sample(["the bedroom floor", "the bathroom mirror", "one visible table", "the sink area", "one messy corner"])} for 15 minutes while staying in the full outfit.`);
+  if (hasChore) add(`Complete ${chore.name.toLowerCase()} in the ${chore.room.toLowerCase()} for ${chore.duration} minutes.`);
+  else if (hasCleaning) add(`Clean ${sample(["the bedroom floor", "the bathroom mirror", "one visible table", "the sink area", "one messy corner"])} for 15 minutes.`);
 
-  if (hasWalk && hasPlug) add(`Go for a 10-minute walk in the outfit while wearing a ${toyOf(["plug"])}.`);
-  else if (hasWalk) add(`Go for a 10-minute walk in the outfit with ${sample(["the heels", "the stockings", "the makeup", "the wig", "the skirt", "the dress"])} clearly visible.`);
+  if (hasWalk && hasPlug) add(`Go for a 10-minute walk while wearing a ${toyOf(["plug"])}.`);
+  else if (hasWalk) add(`Go for a 10-minute walk with ${sample(["the heels", "the stockings", "the makeup", "the wig", "the skirt", "the dress"])} clearly visible.`);
 
   if (hasPublic) add(`${sample([
-    "Stand near a window in the full outfit for 2 minutes and hold one clear pose.",
-    "Step outside in the full outfit for 60 seconds and hold one pose.",
-    "Stand in a doorway in the full outfit for 90 seconds and face outward.",
-    "Take one public-facing photo in the outfit and title it \"Too dressed up to hide.\""
+    "Stand near a window for 2 minutes and hold one clear pose.",
+    "Step outside for 60 seconds and hold one pose.",
+    "Stand in a doorway for 90 seconds and face outward.",
+    "Take one public-facing photo and title it \"Too dressed up to hide.\""
   ])}`);
 
   if (has(a, "Pain")) add(`${sample([
-    "Give yourself 20 spanks while wearing the full outfit.",
+    "Give yourself 20 spanks.",
     "Complete a CBT-focused pain task for 3 minutes before continuing.",
-    "Wear nipple clamps for 5 minutes while holding a pose in the outfit.",
-    "Kneel in the outfit for 5 minutes without adjusting the clothes.",
-    "Do 10 spanks, take one outfit photo, then do 10 more."
+    "Wear nipple clamps for 5 minutes while holding one pose.",
+    "Kneel for 5 minutes without adjusting anything.",
+    "Do 10 spanks, take one photo, then do 10 more."
   ])}`);
 
   if (has(a, "Hypno")) add(`${sample([
-    `Watch one sissy hypno video for 10 minutes while wearing the full outfit. Then repeat this Oracle caption 10 times: "${captionFor("confession", outfit.title)}"`,
-    `Browse sissy captions for 10 minutes. Save the 3 that hit hardest and write this caption underneath them: "${captionFor("confession", outfit.title)}"`,
-    `Collect 5 sissy captions that match the outfit. Read each one out loud once, then repeat this final line 10 times: "${captionFor("confession", outfit.title)}"`,
-    `Watch one sissy hypno video until it ends. Keep the outfit fully on and write this sentence afterward: "${captionFor("confession", outfit.title)}"`
+    `Watch one sissy hypno video for 10 minutes. Then repeat this Oracle caption 10 times: "${captionFor("confession", outfit.title)}"`,
+    `Browse sissy captions for 10 minutes. Save the 3 that hit hardest and add this note to the saved set: "${captionFor("confession", outfit.title)}"`,
+    `Collect 5 sissy captions that match the session. Read each one out loud once, then repeat this final line 10 times: "${captionFor("confession", outfit.title)}"`,
+    `Watch one sissy hypno video until it ends. Write this sentence afterward: "${captionFor("confession", outfit.title)}"`
   ])}`);
 
   if (hasAnal && hasPlug && hasDildo) add(`Do anal training in two parts: wear a ${toyOf(["plug"])} for 10 minutes, then use a ${toyOf(["dildo"])} for 5 minutes.`);
-  else if (hasAnal && hasPlug) add(`Start anal training by wearing a ${toyOf(["plug"])} for 15 minutes in the full outfit.`);
-  else if (hasAnal) add(`Complete 15 minutes of anal training in the full outfit.`);
+  else if (hasAnal && hasPlug) add(`Start anal training by wearing a ${toyOf(["plug"])} for 15 minutes.`);
+  else if (hasAnal) add(`Complete 15 minutes of anal training.`);
 
-  if (hasOral && hasDildo) add(`Complete oral training with a ${toyOf(["dildo"])}: 3 rounds, 1 minute each, while staying in the full outfit.`);
-  else if (hasOral) add(`Complete oral training in the outfit: 5 repeated practice rounds with controlled posture and makeup kept neat.`);
+  if (hasOral && hasDildo) add(`Complete oral training with a ${toyOf(["dildo"])}: 3 rounds, 1 minute each.`);
+  else if (hasOral) add(`Complete oral training: 5 repeated practice rounds with controlled posture and makeup kept neat.`);
 
-  if (hasDildo && !hasAnal && !hasOral) add(`Use a ${toyOf(["dildo"])} for 10 minutes while wearing the full outfit.`);
-  if (hasVibe) add(`Use a ${toyOf(["vibrator"])} for 8 minutes in the outfit.`);
-  if (hasToy && !hasDildo && !hasVibe && !hasPlug) add(`Use the ${toyOf()} for 10 minutes while keeping the outfit fully on.`);
+  if (hasDildo && !hasAnal && !hasOral) add(`Use a ${toyOf(["dildo"])} for 10 minutes.`);
+  if (hasVibe) add(`Use a ${toyOf(["vibrator"])} for 8 minutes.`);
+  if (hasToy && !hasDildo && !hasVibe && !hasPlug) add(`Use the ${toyOf()} for 10 minutes.`);
 
-  if (has(a, "Edging")) add(`Edge 3 times in the outfit, stopping before orgasm each time.`);
-  if (has(a, "Denial")) add(`Complete the sexual part without orgasm and stay dressed for 10 minutes after stopping.`);
+  if (has(a, "Edging")) add(`Edge 3 times, stopping before orgasm each time.`);
+  if (has(a, "Denial")) add(`Complete the sexual part without orgasm, then wait 10 minutes before changing anything.`);
   if (has(a, "Orgasm Control")) add(`At the end, roll once: 1–2 denied, 3–4 ruined orgasm, 5–6 orgasm allowed.`);
-  if (has(a, "Chastity")) add(`Put on chastity before the outfit and keep it on through every selected task.`);
+  if (has(a, "Chastity")) add(`Lock chastity before starting the task chain and keep it on through every selected task.`);
   if (has(a, "Bondage")) add(`${sample([
-    "Spend 10 minutes with wrists restrained while wearing the full outfit.",
-    "Spend 10 minutes with ankles limited while wearing the full outfit.",
+    "Spend 10 minutes with wrists restrained.",
+    "Spend 10 minutes with ankles limited.",
     "Wear a blindfold for 10 minutes during the next selected task.",
     "Wear a collar for the rest of the session.",
     "Use a gag during the next photo task."
@@ -628,11 +635,11 @@ function buildActivityTasks(outfit) {
 
   if (has(a, "Bimbo Training")) add(`Do a bimbo training set: 3 poses, 3 dumb captions, and one repeated line: "Glossy lips, empty head, dressed for attention."`);
   if (has(a, "Sissy Training")) add(`Complete a sissy training sequence: 3 poses, 3 repeated lines, and the most sexual selected task.`);
-  if (has(a, "Doll Training")) add(`Hold 3 doll poses for 60 seconds each in the full outfit.`);
+  if (has(a, "Doll Training")) add(`Hold 3 doll poses for 60 seconds each.`);
   if (has(a, "Pet Play")) add(`${sample([
     "Spend 10 minutes in pet mode: kneel, crawl, pose, and hold still.",
     "Wear a collar and hold a pet pose for 3 minutes.",
-    "Crawl across the room once in the outfit, then hold one pet pose for 60 seconds.",
+    "Crawl across the room once, then hold one pet pose for 60 seconds.",
     `Take one pet-style photo with this caption: "${captionFor("post", outfit.title)}"`
   ])}`);
 
@@ -640,15 +647,15 @@ function buildActivityTasks(outfit) {
   if (has(a, "Captions")) add(`Use these 3 exact captions: 1. "${captionFor("post", outfit.title)}" 2. "${captionFor("post", outfit.title)}" 3. "${captionFor("post", outfit.title)}"`);
 
   if (has(a, "Private Photos")) add(`${sample([
-    `Take one full-body outfit photo and set it as your phone wallpaper for the rest of the session. Use this caption privately: "${caption}"`,
-    `Take one full-body outfit photo and set it as your lock screen for the rest of the session. Use this caption privately: "${caption}"`,
-    `Create a private album titled "${caption}" and save 3 outfit photos in it.`,
-    `Take 4 private photos: underwear detail, full outfit, shoes, and final pose. Save them under this title: "${caption}"`
+    `Take one full-body photo and set it as your phone wallpaper for the rest of the session. Use this caption privately: "${caption}"`,
+    `Take one full-body photo and set it as your lock screen for the rest of the session. Use this caption privately: "${caption}"`,
+    `Create a private album titled "${caption}" and save 3 photos in it.`,
+    `Take 4 private photos: underwear detail, full-body pose, shoes, and final pose. Save them under this title: "${caption}"`
   ])}`);
-  else if (has(a, "Photo Set")) add(`Take 6 photos: full outfit front, full outfit back, underwear detail, shoes/legwear close-up, action shot, and final pose.`);
+  else if (has(a, "Photo Set")) add(`Take 6 photos: front pose, back pose, underwear detail, shoes/legwear close-up, action shot, and final pose.`);
 
-  if (has(a, "Sissy Exposure") && !hasPost) add(`Take one outfit photo and title it "Proof I dressed like this willingly."`);
-  if (hasPost) add(`Post one outfit photo online with this exact caption: "${caption}"`);
+  if (has(a, "Sissy Exposure") && !hasPost) add(`Take one photo and title it "Proof I dressed like this willingly."`);
+  if (hasPost) add(`Post one photo online with this exact caption: "${caption}"`);
 
   if (has(a, "Hookup")) {
     const msg = sample([
@@ -660,7 +667,7 @@ function buildActivityTasks(outfit) {
     add(`Look for a hookup with the first guy you find on Grindr. Send this exact message: "${msg}"`);
   }
 
-  if (!tasks.length) add(`Do a 20-minute outfit session: show off the full look, take one photo, write this caption exactly: "${captionFor("post", outfit.title)}", and hold a final pose.`);
+  if (!tasks.length) add(`Do a 20-minute session: show off the full look, take one photo, write this caption exactly: "${captionFor("post", outfit.title)}", and hold a final pose.`);
   return combineTasks(tasks, a);
 }
 
