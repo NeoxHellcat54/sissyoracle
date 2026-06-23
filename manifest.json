@@ -1,17 +1,23 @@
 {
-  "name": "The Great Oracle of Sissy Sluts",
-  "short_name": "Sissy Oracle",
-  "description": "A fantasy and roleplay session generator PWA.",
-  "start_url": "./index.html",
+  "name": "Dressed & Dared",
+  "short_name": "D&Dared",
+  "description": "A neon outfit, location, and dare randomizer.",
+  "start_url": ".",
+  "scope": ".",
   "display": "standalone",
-  "background_color": "#08020d",
-  "theme_color": "#08020d",
-  "orientation": "portrait-primary",
+  "background_color": "#050309",
+  "theme_color": "#15061f",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='44' fill='%23100012'/%3E%3Ccircle cx='96' cy='96' r='58' fill='%23ff4fd8' opacity='.26'/%3E%3Ctext x='96' y='112' text-anchor='middle' font-size='72' fill='%23ffeafd'%3EO%3C/text%3E%3C/svg%3E",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]

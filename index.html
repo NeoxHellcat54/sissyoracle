@@ -2,205 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#08020d" />
-  <title>The Great Oracle of Sissy Sluts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#15061f" />
+  <meta name="description" content="Dressed & Dared - a neon outfit, location, and dare randomizer." />
+  <title>Dressed & Dared</title>
   <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <div class="page-aura" aria-hidden="true"></div>
-  <div class="starfield" aria-hidden="true"></div>
-
-  <header class="app-header">
-    <div class="brand-mark" aria-hidden="true">
-      <span class="sigil-ring outer"></span>
-      <span class="sigil-ring middle"></span>
-      <span class="sigil-eye"></span>
-    </div>
-    <div class="brand-copy">
-      <p class="eyebrow">Fantasy session oracle</p>
-      <h1>The Great Oracle<br />of Sissy Sluts</h1>
-      <p class="subtitle">Choose the vision. Accept the tone. Let the Oracle roll the session.</p>
-    </div>
-  </header>
-
-  <main class="app-shell">
-    <section id="homeView" class="view active">
-      <div class="oracle-layout home-layout">
-        <section class="card hero-card tarot-card major-card">
-          <div class="card-corners" aria-hidden="true"></div>
-          <p class="eyebrow">The chamber is open</p>
-          <h2>Speak with the Oracle</h2>
-          <p class="muted">Build a session through outfit prompts, verbal treatment, and direct activity rolls.</p>
-          <div class="home-actions">
-            <button id="startOracleBtn" class="primary huge ritual-button">This Sissy Slut wishes to speak with the Oracle</button>
-            <button id="openSettingsBtn" class="secondary huge">Settings menu</button>
-          </div>
-        </section>
-
-        <section class="card tarot-card side-card saved-card">
-          <div class="section-heading">
-            <p class="eyebrow">Archive</p>
-            <h2>Saved sessions</h2>
-          </div>
-          <ul id="savedSessions" class="list session-list"></ul>
-        </section>
+<body class="theme-neon">
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Neon Dressing Room</p>
+        <h1>Dressed <span>&amp;</span> Dared</h1>
       </div>
-    </section>
-
-    <section id="settingsView" class="view">
-      <div class="card tarot-card page-card">
-        <div class="result-topline">
-          <div>
-            <p class="eyebrow">Settings menu</p>
-            <h2>Define lists and special items</h2>
-            <p class="muted">Chores, toys, and special wardrobe pieces feed the Oracle without forcing a full wardrobe database.</p>
-          </div>
-          <button class="secondary goHomeBtn">Back home</button>
+      <div class="wallet" title="Exhys balance">
+        <span class="wallet-icon">✦</span>
+        <div>
+          <strong id="exhysBalance">0</strong>
+          <small>Exhys</small>
         </div>
       </div>
+    </header>
 
-      <section class="grid two-col settings-grid">
-        <div class="card tarot-card">
-          <div class="section-heading compact-heading">
-            <p class="eyebrow">Useful tasks</p>
-            <h2>Chore list</h2>
-          </div>
-          <p class="muted">Used when Chores or Maid Service is selected.</p>
-          <form id="choreForm" class="inline-form">
-            <input id="choreName" type="text" placeholder="e.g. Clean bedroom surfaces" required />
-            <select id="choreRoom">
-              <option>Bedroom</option>
-              <option>Bathroom</option>
-              <option>Kitchen</option>
-              <option>Laundry</option>
-              <option>General</option>
-            </select>
-            <select id="choreDuration">
-              <option value="5">5 min</option>
-              <option value="10">10 min</option>
-              <option value="15" selected>15 min</option>
-              <option value="20">20 min</option>
-              <option value="30">30 min</option>
-            </select>
-            <button class="secondary" type="submit">Add</button>
-          </form>
-          <ul id="choreList" class="list"></ul>
-        </div>
+    <main>
+      <section id="view-home" class="view active"></section>
+      <section id="view-wardrobe" class="view"></section>
+      <section id="view-lists" class="view"></section>
+      <section id="view-shop" class="view"></section>
+    </main>
 
-        <div class="card tarot-card">
-          <div class="section-heading compact-heading">
-            <p class="eyebrow">Kink inventory</p>
-            <h2>Toy / kink items</h2>
-          </div>
-          <p class="muted">Used by Toy Use, Plug Wearing, Dildo Use, Vibrator Use, Bondage, Chastity, and related activities.</p>
-          <form id="toyForm" class="inline-form short-form">
-            <input id="toyName" type="text" placeholder="e.g. Large plug" required />
-            <button class="secondary" type="submit">Add</button>
-          </form>
-          <ul id="toyList" class="list"></ul>
-        </div>
-      </section>
+    <nav class="bottom-nav" aria-label="Main navigation">
+      <button class="nav-btn active" data-view="home"><span>◆</span>Home</button>
+      <button class="nav-btn" data-view="wardrobe"><span>◇</span>Wardrobe</button>
+      <button class="nav-btn" data-view="lists"><span>✚</span>Lists</button>
+      <button class="nav-btn" data-view="shop"><span>✦</span>Shop</button>
+    </nav>
+  </div>
 
-      <section class="card tarot-card">
-        <div class="section-heading compact-heading">
-          <p class="eyebrow">Wardrobe altar</p>
-          <h2>Special wardrobe</h2>
-        </div>
-        <p class="muted">Optional exact items for specific outfit prompts. The Oracle may use them or ignore them when a freer roll works better.</p>
-        <div id="settingsList" class="settings-list"></div>
-      </section>
-    </section>
-
-    <section id="outfitView" class="view">
-      <div class="card tarot-card oracle-step step-card">
-        <div class="step-topline">
-          <div>
-            <p class="eyebrow">Step 1 of 3</p>
-            <h2>So then, how is this Sissy Slut imagining her outfit?</h2>
-          </div>
-          <span id="outfitCount" class="selection-pill">0 / 2</span>
-        </div>
-        <p class="muted">Choose up to 2 outfit prompts.</p>
-        <div id="outfitPromptGrid" class="tag-grid large prompt-grid"></div>
-        <div class="button-row spread sticky-actions">
-          <button class="secondary goHomeBtn">Back home</button>
-          <button id="toTreatmentBtn" class="primary">Accept outfit direction</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="treatmentView" class="view">
-      <div class="card tarot-card oracle-step step-card">
-        <div class="step-topline">
-          <div>
-            <p class="eyebrow">Step 2 of 3</p>
-            <h2>How do you wish to be treated?</h2>
-          </div>
-          <span id="treatmentCount" class="selection-pill">0 / 2</span>
-        </div>
-        <p class="muted">Choose up to 2 verbal treatment prompts. They change how the Oracle speaks, not the structure.</p>
-        <div id="treatmentPromptGrid" class="tag-grid large prompt-grid"></div>
-        <div class="button-row spread sticky-actions">
-          <button id="backToOutfitBtn" class="secondary">Back to outfit</button>
-          <button id="toActivityBtn" class="primary">Accept treatment</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="activityView" class="view">
-      <div class="card tarot-card oracle-step step-card">
-        <div class="step-topline">
-          <div>
-            <p class="eyebrow">Step 3 of 3</p>
-            <h2>What would you like to do today?</h2>
-          </div>
-          <span id="activityCount" class="selection-pill">0 selected</span>
-        </div>
-        <p class="muted">Choose as many activities as you want. The Oracle may keep them separate or combine them.</p>
-        <div id="activityPromptGrid" class="activity-groups"></div>
-        <div class="field compact length-field">
-          <span>Session length</span>
-          <select id="sessionLength">
-            <option value="quick">Quick</option>
-            <option value="30" selected>30 minutes</option>
-            <option value="45">45 minutes</option>
-            <option value="60">60 minutes</option>
-            <option value="open">Open-ended</option>
-          </select>
-        </div>
-        <div class="button-row spread sticky-actions">
-          <button id="backToTreatmentBtn" class="secondary">Back to treatment</button>
-          <button id="generateSessionBtn" class="primary ritual-button">Generate session</button>
-        </div>
-      </div>
-    </section>
-
-    <section id="resultView" class="view">
-      <section id="resultCard" class="card tarot-card result-card reveal-card" aria-live="polite">
-        <div class="result-topline">
-          <div>
-            <p class="eyebrow">The Oracle has chosen</p>
-            <h2 id="resultTitle">Session Title</h2>
-          </div>
-          <button id="saveSessionBtn" class="secondary">Save</button>
-        </div>
-        <div id="resultContent" class="result-content"></div>
-        <div class="button-row wrap result-actions">
-          <button id="rerollBtn" class="primary">Reroll whole session</button>
-          <button id="changeOutfitBtn" class="secondary">Change outfit</button>
-          <button id="changeTreatmentBtn" class="secondary">Change treatment</button>
-          <button id="changeActivityBtn" class="secondary">Change activities</button>
-          <button class="secondary goHomeBtn">Back home</button>
-        </div>
-      </section>
-    </section>
-  </main>
-
-  <footer class="app-footer">
-    <p>The Oracle stores chores, wardrobe items, toys, and saved sessions locally in this browser.</p>
-  </footer>
+  <div id="toast" class="toast" aria-live="polite"></div>
 
   <script src="app.js"></script>
 </body>

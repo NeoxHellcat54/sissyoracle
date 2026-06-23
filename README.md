@@ -1,55 +1,113 @@
-# The Great Oracle of Sissy Sluts — PWA Starter
+# Dressed & Dared
 
-A local-first guided PWA session roller with a Dark Oracle / Occult Tarot UI.
+A GitHub-ready static PWA for rolling:
 
-## Current flow
+- a hard-coded category/color outfit
+- one fully random user-filled location
+- a user-selected number of fully random, non-duplicate dares
 
-1. Home
-2. Settings menu
-3. This Sissy Slut wishes to speak with the Oracle
-4. Outfit prompts, max 2
-5. How do you wish to be treated?, max 2
-6. Activity prompts, unlimited
-7. Generated session
+The app uses local storage only. No accounts, Firebase, or backend.
 
-## Current UI
+## Current locked rules
 
-The app now uses the locked Dark Oracle / Occult Tarot direction:
+### Outfit
 
-- deep black/purple background
-- hot pink glow accents
-- gold tarot-card borders
-- glowing selected prompt chips
-- grouped activity sections
-- revealed result cards
-- mobile-first layout
+- Clothing categories are hard-coded.
+- The user only checks available colors per category.
+- No item types.
+- If a category has no checked colors, it is skipped.
+- Normal outfit rolls have a 30% matching-color chance and a 70% mixed-color chance.
+- If the user owns shop outfits, outfit source is 75% normal random outfit and 25% shop outfit.
 
-## Current systems
+### Locations
 
-### Outfit prompts
+- User-filled plain list.
+- No categories.
+- No intensity.
+- Full randomness.
+- One location is rolled.
 
-The app uses 20 outfit prompts:
+### Dares
 
-Maid, Goth, Latex, Princess, Bimbo, Party Slut, Stripper, Schoolgirl, Lingerie, Doll, Casual Slut, Office Slut, Housewife, Pet, Cheerleader, Bride, Nurse, Pornstar, E-Girl, Emo.
+- User-filled plain list.
+- No categories.
+- No intensity.
+- No placeholders.
+- User chooses how many dares to roll.
+- Same dare cannot appear twice in the same roll.
 
-Each prompt has variety pools for underwear, main outfit, overlay, legwear, shoes, hair, and makeup. Special wardrobe items can be added for any prompt. Defaults include Princess Belle dress, Princess Elsa dress, black/red/pink latex catsuits, and latex maid dress.
+### Exhys
 
-### Treatment prompts
+- Each rolled dare gets a reward from 30 to 70 Exhys.
+- Lower values are more likely.
+- Weight formula: `weight = 2 - ((amount - 30) / 40)`.
+- Total roll reward is the sum of each dare reward.
+- The user claims Exhys by pressing **Mark as Done**.
 
-Treatment prompts affect the Oracle's wording only. There is no separate Treatment section in the final result.
+### Shop
 
-### Activities
+Shop categories:
 
-The app uses 30 activity prompts, with unlimited selection. Activities can generate individual tasks or combine into task chains. Captions, confessions, messages, posts, and photo titles are generated as exact text.
+- Themes
+- Roll Effects
+- Outfits
 
-## Local preview
+Every purchase globally increases all future shop prices by 10% compounded.
 
-```bash
-python3 -m http.server 8080
+Formula:
+
+```js
+currentPrice = basePrice * Math.pow(1.1, totalPurchases)
+currentPrice = Math.ceil(currentPrice * 10) / 10
 ```
 
-Then open `http://localhost:8080`.
+### Purchasable outfit rarity roster
 
-## Deployment
+Common:
 
-This can be uploaded to GitHub Pages, Netlify, Vercel, or any static host. It stores data locally in the browser using localStorage.
+- Angel Lingerie — all white lingerie and heels only
+- Devil Lingerie — black and red heels and lingerie only
+- Casual Girly — jeans, trainers, t-shirt
+- Elegant Girly — elegant dress and heels
+
+Rare:
+
+- Cheerleader
+- Maid
+- Schoolgirl
+- Goth
+
+Epic:
+
+- Princess Belle Cosplay
+- Elsa Cosplay
+
+Legendary:
+
+- Latex Maid
+- Latex Doll
+
+## Deploy on GitHub Pages
+
+1. Create a new GitHub repository.
+2. Upload all files from this folder.
+3. Open the repository settings.
+4. Go to **Pages**.
+5. Set the source to your main branch and root folder.
+6. Save.
+
+GitHub Pages will host the app as a static PWA.
+
+## Local testing
+
+Open `index.html` directly, or run a small local server:
+
+```bash
+python -m http.server 8000
+```
+
+Then open:
+
+```text
+http://localhost:8000
+```
